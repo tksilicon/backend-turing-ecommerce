@@ -3,12 +3,10 @@
  */
 package com.turing.ecommerce.controllers;
 
-import static io.restassured.RestAssured.given;
 
-import org.apache.http.HttpStatus;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.turing.ecommerce.DTO.AuthenticationRequest;
@@ -21,14 +19,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import static io.restassured.RestAssured.*;
+
+
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+
+
 
 /**
  * @author thankgodukachukwu
  *
  */
 
-@ContextConfiguration
-@ExtendWith(SpringExtension.class)
+//@ContextConfiguration
+@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Slf4j
 public class SecurityIntegrationTest {
@@ -57,7 +65,7 @@ public class SecurityIntegrationTest {
 	}
 	
 	
-	 @Test
+	@Test
 	    public void getCustomer() throws Exception {
 	        //@formatter:off
 	         given()
@@ -69,7 +77,7 @@ public class SecurityIntegrationTest {
 
 	        .then()
 	            .assertThat()
-	            .statusCode(HttpStatus.SC_OK);
+	            .statusCode(200);
 	         //@formatter:on
 	    }
 

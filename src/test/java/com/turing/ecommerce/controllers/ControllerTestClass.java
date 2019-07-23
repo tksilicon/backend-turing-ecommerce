@@ -2,9 +2,6 @@ package com.turing.ecommerce.controllers;
 
 import org.springframework.boot.test.context.SpringBootTest;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.turing.ecommerce.DTO.AttributeDTO;
@@ -20,14 +17,8 @@ import com.turing.ecommerce.DTO.ProductDetailsDTO;
 import com.turing.ecommerce.DTO.ProductLocationsDTO;
 import com.turing.ecommerce.DTO.ProductReviewDTO;
 import com.turing.ecommerce.DTO.ReviewDTO;
-import com.turing.ecommerce.model.Attribute;
-import com.turing.ecommerce.model.Category;
 import com.turing.ecommerce.model.Customer;
-import com.turing.ecommerce.model.Department;
 import com.turing.ecommerce.model.Product;
-import com.turing.ecommerce.repository.AttributesRepository;
-import com.turing.ecommerce.repository.CategoryRepository;
-import com.turing.ecommerce.repository.DepartmentRepository;
 import com.turing.ecommerce.service.AttributeDAOService;
 import com.turing.ecommerce.service.AttributesService;
 import com.turing.ecommerce.service.CategoryService;
@@ -35,13 +26,9 @@ import com.turing.ecommerce.service.CustomerService;
 import com.turing.ecommerce.service.DepartmentService;
 import com.turing.ecommerce.service.ProdCatDAOService;
 import com.turing.ecommerce.service.ProductService;
-import com.turing.ecommerce.service.ReviewService;
-
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -50,22 +37,17 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.json.JSONObject;
-import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.is;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -88,59 +70,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
  * @author thankgodukachukwu
  */
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-//@AutoConfigureMockMvc
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ControllerTestClass {
 
-	@Autowired
-	ProductService productService;
-
-	@Autowired
-	private AttributesService attributesService;
-
-	@Autowired
-	private DepartmentService departmentService;
-
-	@Autowired
-	private CategoryService categoryService;
-
-	@Autowired
-	private CustomerService customerService;
-
-	@Autowired
-	private ReviewService reviewService;
-
-	@Autowired
-	private ProdCatDAOService prodCatDAOService;
-
-	@Autowired
-	private AttributeDAOService attributesService2;
-
-	@Autowired
-	private CategoryRepository categoryRepository;
-
-	@Autowired
-	private DepartmentRepository departmentRepository;
-
-	@Autowired
-	private AttributesRepository attributesRepository;
 
 	@Autowired
 	private WebApplicationContext wac;
 
 	private MockMvc mockMvc;
 
-	@Autowired
-	private TestRestTemplate template;
-	
-	private ObjectMapper mapper;
 	
 	
 
 	@Before
 	public void setup() {
-		mapper = new ObjectMapper();
+		
 
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
 
