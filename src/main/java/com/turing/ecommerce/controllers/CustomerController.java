@@ -142,7 +142,7 @@ public class CustomerController {
 	}
 
 	@GetMapping("/api/customer")
-	public ResponseEntity<Optional<Customer>> getCustomerById(Authentication authentication) {
+	public ResponseEntity<Optional<Customer>> getCustomerById(Authentication authentication) throws Exception {
 
 		return ResponseEntity.ok(customerService.findByEmail(authentication.getName()));
 
