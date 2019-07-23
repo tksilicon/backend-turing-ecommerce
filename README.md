@@ -14,9 +14,15 @@ Documentations developed with Swagger.
 
 Database is MySQL
 
+Live Deployment link: https://backend-turing-ecommerce.herokuapp.com/api/
 
-List of endpoints
 
+List of endpoints can be found here:
 
+https://backend-turing-ecommerce.herokuapp.com/swagger-ui.html
+
+https://protected-shelf-48680.herokuapp.com/swagger-ui.html
 
 Hours spent on the project - Minimum of 12 hours for 14 days (168hours)
+
+
