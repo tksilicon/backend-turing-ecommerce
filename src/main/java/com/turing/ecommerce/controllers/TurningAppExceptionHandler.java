@@ -146,7 +146,7 @@ public class TurningAppExceptionHandler extends ResponseEntityExceptionHandler {
 			ApiErrorResponse errorResponse = new ApiErrorResponse("USR_19", String.valueOf(HttpStatus.BAD_REQUEST));
 			errorResponse.addValidationErrors(exx.getConstraintViolations());
 		}
-		ApiErrorResponse errorResponse = new ApiErrorResponse("USR_DATA", ex.getMessage(), ex.getMessage(),
+		ApiErrorResponse errorResponse = new ApiErrorResponse("USR_DATA", ex.getMessage(), ex.getCause().getMessage(),
 				String.valueOf(HttpStatus.BAD_REQUEST));
 
 		return new ResponseEntity<ApiErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -266,6 +266,24 @@ public class TurningAppExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	
 	
+	
+	/**
+	 * Handles javax.persistence.RollbackException
+	 * fails.
+	 *
+	 * @param ex the javax.persistence.RollbackException
+	 * @return the ApiErrorResponse object
+	 */
+	@ExceptionHandler(javax.persistence.RollbackException.class)
+	public final ResponseEntity<ApiErrorResponse> handleBadCredentialsException(
+			javax.persistence.RollbackException ex) {
+		
+		
+		ApiErrorResponse errorResponse = new ApiErrorResponse("USR_P1", ex.getMessage(),
+				"Persistence Error", String.valueOf(HttpStatus.BAD_REQUEST));
+
+		return new ResponseEntity<ApiErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
+	}
 	
 
 }

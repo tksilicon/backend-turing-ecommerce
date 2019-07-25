@@ -52,7 +52,7 @@ public class ChargeController {
     	Stripe.apiKey = "sk_test_lomdOfxbm7QDgZWvR82UhV6D";
 
     	Map<String, Object> webhookendpointParams = new HashMap<String, Object>();
-    	webhookendpointParams.put("url", "https://example.com/my/webhook/endpoint");
+    	webhookendpointParams.put("url", "https://backend-turing-ecommerce.herokuapp.com/api/stripe/webhooks");
     	webhookendpointParams.put("enabled_events", Arrays.asList("charge.failed", "charge.succeeded"));
 
     	WebhookEndpoint endpoint = WebhookEndpoint.create(webhookendpointParams);

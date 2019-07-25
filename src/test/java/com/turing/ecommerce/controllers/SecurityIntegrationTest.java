@@ -5,6 +5,7 @@ package com.turing.ecommerce.controllers;
 
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -66,7 +67,7 @@ public class SecurityIntegrationTest {
 	
 	
 	@Test
-	    public void getCustomer() throws Exception {
+	public void getCustomer() throws Exception {
 	        //@formatter:off
 	         given()
 

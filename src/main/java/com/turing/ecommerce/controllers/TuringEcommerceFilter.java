@@ -38,7 +38,8 @@ public class TuringEcommerceFilter implements Filter {
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
 			throws IOException, ServletException {
 		
-
+		
+		
 		HttpServletRequest req = (HttpServletRequest) servletRequest;
 		HttpServletResponse res = (HttpServletResponse) servletResponse;
 		LOG.info("Logging Request  {} : {}", req.getMethod(), req.getRequestURI());

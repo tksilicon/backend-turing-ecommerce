@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.turing.ecommerce.model.Customer;
 import com.turing.ecommerce.repository.CustomerRepository;
@@ -30,6 +31,7 @@ public class CustomerServiceImpl implements CustomerService {
 	 * @param customer
 	 * @return
 	 */
+	@Transactional
 	@Override
 	public Customer save(Customer customer) {
 		

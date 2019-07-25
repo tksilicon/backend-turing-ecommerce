@@ -32,9 +32,6 @@ public class Customer implements UserDetails, Serializable {
 	@Column(name="customer_id")
 	private int customerId;
 	
-
-	
-
 	
 	@Column(name="address_1")
 	private String address1;

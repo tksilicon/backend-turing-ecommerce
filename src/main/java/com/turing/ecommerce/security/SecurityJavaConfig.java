@@ -20,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
+import com.turing.ecommerce.security.jwt.JwtAuthenticationEntryPoint;
 import com.turing.ecommerce.security.jwt.JwtConfigurer;
 import com.turing.ecommerce.security.jwt.JwtTokenProvider;
 
@@ -32,6 +33,9 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
 	private MySavedRequestAwareAuthenticationSuccessHandler mySavedRequestAwareAuthenticationSuccessHandler;
 
 	private SimpleUrlAuthenticationFailureHandler myFailureHandler = new SimpleUrlAuthenticationFailureHandler();
+	
+	@Autowired
+	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
 	@Autowired
 	JwtTokenProvider jwtTokenProvider;
@@ -48,7 +52,8 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http
+		http //.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
+		//.and()
 		     .httpBasic().disable()
 		     .csrf().disable()
 		     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

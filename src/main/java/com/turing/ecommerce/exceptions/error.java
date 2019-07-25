@@ -7,14 +7,14 @@ package com.turing.ecommerce.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-
+import io.swagger.annotations.Api;
 import lombok.Data;
 
 /**
  * @author thankgodukachukwu
  *
  */
-
+@Api
 @Data
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
 public class error  {

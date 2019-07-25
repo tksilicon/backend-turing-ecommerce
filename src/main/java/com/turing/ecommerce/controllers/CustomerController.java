@@ -13,6 +13,8 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -21,6 +23,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -152,7 +155,8 @@ public class CustomerController {
 	 * API endpoint to register customers
 	 */
 	@PostMapping(path = "/api/customers")
-	public ResponseEntity<Map<String, Object>> registerCustomer(@Valid @RequestBody CustomerForm cust)
+	public ResponseEntity registerCustomer(@Valid @RequestBody CustomerForm cust, 
+			final BindingResult bindingResult)
 			throws CustomerExistException {
 
 		Optional<Customer> existed = customerService.findByEmail(cust.getEmail());
@@ -167,6 +171,7 @@ public class CustomerController {
 		existsx.setEmail(cust.getEmail());
 		//existsx.setPassword(cust.getPassword());
 		existsx.setPassword(passwordEncoder.encode(cust.getPassword()));
+		existsx.setShippingRegionId(1);
 
 		customerService.save(existsx);
 
@@ -179,17 +184,25 @@ public class CustomerController {
 
 		String token = jwtTokenProvider.createToken(cust.getEmail(), Arrays.asList("USER"));
 
-		int hours = (int) ((jwtTokenProvider.getValidityInMilliseconds() / (1000 * 60 * 60)) % 24);
-
-		String output = "" + hours + "h";
+		//int hours = (int) ((jwtTokenProvider.getValidityInMilliseconds() / (1000 * 60 * 60)) % 24);
+        //String output = "" + hours + "h";
 
 		String username = cust.getEmail();
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, cust.getPassword()));
 
 		mapResponse.put("accessToken","Bearer "+ token);
 		mapResponse.put("expires_in", "24h");
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.add(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8");
+	    headers.add("USER_KEY", "Bearer "+ token);
+	         
+	    
+	    return ResponseEntity.ok()
+	            .headers(headers)
+	            .body(mapResponse);
 
-		return ResponseEntity.ok(mapResponse);
+		//return ResponseEntity.ok(mapResponse);
 
 	}
 
