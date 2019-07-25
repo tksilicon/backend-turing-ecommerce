@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.turing.ecommerce.DTO.CustomerForm;
 import com.turing.ecommerce.DTO.CustomerUpdateForm;
@@ -46,6 +47,7 @@ import com.turing.ecommerce.utils.Uid;;
  * @author frankukachukwu
  *
  */
+@RestController
 public class CartController {
 
 	@Resource(name = "CartServiceImpl")
@@ -69,7 +71,7 @@ public class CartController {
 	 * API endpoint to add to shopping cart
 	 */
 	@PostMapping(path = "/api/shoppingcart/add")
-	public ResponseEntity<List<ShoppingCartProduct>> registerCustomer(@Valid @RequestBody ShoppingCartForm cart)
+	public ResponseEntity<List<ShoppingCartProduct>> addToShoppingCart(@Valid @RequestBody ShoppingCartForm cart)
 			throws CustomerExistException {
 
 		ProductDetailsDTO pdo = cartService.getProduct(cart.getProductId())
