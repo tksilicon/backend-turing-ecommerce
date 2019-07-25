@@ -188,7 +188,7 @@ public class CustomerController {
         //String output = "" + hours + "h";
 
 		String username = cust.getEmail();
-		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, cust.getPassword()));
+		//authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, cust.getPassword()));
 
 		mapResponse.put("accessToken","Bearer "+ token);
 		mapResponse.put("expires_in", "24h");
