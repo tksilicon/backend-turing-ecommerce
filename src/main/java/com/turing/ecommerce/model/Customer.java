@@ -73,7 +73,6 @@ public class Customer implements UserDetails, Serializable {
 	private String region;
 
 	@Column(name="shipping_region_id")
-	@Positive
 	private int shippingRegionId;
 	
 	@Transient

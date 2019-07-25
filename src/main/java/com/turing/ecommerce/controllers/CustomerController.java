@@ -171,7 +171,7 @@ public class CustomerController {
 		existsx.setEmail(cust.getEmail());
 		//existsx.setPassword(cust.getPassword());
 		existsx.setPassword(passwordEncoder.encode(cust.getPassword()));
-		existsx.setShippingRegionId(1);
+		
 
 		customerService.save(existsx);
 
