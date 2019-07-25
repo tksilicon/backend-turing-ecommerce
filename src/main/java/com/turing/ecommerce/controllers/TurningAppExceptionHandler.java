@@ -280,7 +280,7 @@ public class TurningAppExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		
 		ApiErrorResponse errorResponse = new ApiErrorResponse("USR_P1", ex.getMessage(),
-				"Persistence Error", String.valueOf(HttpStatus.BAD_REQUEST));
+				ex.getCause().getMessage(), String.valueOf(HttpStatus.BAD_REQUEST));
 
 		return new ResponseEntity<ApiErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
