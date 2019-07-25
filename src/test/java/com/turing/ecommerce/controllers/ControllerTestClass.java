@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.turing.ecommerce.DTO.AttributeDTO;
 import com.turing.ecommerce.DTO.AttributesProductDTO;
+import com.turing.ecommerce.DTO.AuthenticationRequest;
 import com.turing.ecommerce.DTO.CategoryAllDTO;
 import com.turing.ecommerce.DTO.CategoryDTO;
 import com.turing.ecommerce.DTO.CategoryProductDTO;
@@ -28,6 +29,10 @@ import com.turing.ecommerce.service.ProdCatDAOService;
 import com.turing.ecommerce.service.ProductService;
 import com.turing.ecommerce.utils.Uid;
 
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import lombok.extern.slf4j.Slf4j;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -48,11 +53,12 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-
+import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -75,25 +81,52 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
  *
  * @author thankgodukachukwu
  */
-
+@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ControllerTestClass {
-
 
 	@Autowired
 	private WebApplicationContext wac;
 
 	private MockMvc mockMvc;
+	
+	@LocalServerPort
+	int port;
 
+	@Autowired
+	ObjectMapper objectMapper;
+
+	private String token;
 	
+	private String emailAddress;
+	private String password;
+	public String getEmail() {
+		// Generate different email for testing
+		String str = Uid.generateRandomId(7, "abcdefghjkmnpqrstuvwxyz23456789", Character.LOWERCASE_LETTER);
+		emailAddress = str + "@gmail.com";
+		return emailAddress;
+				
+	}
 	
+	public String getPassword() {
+		return password = Uid.generateRandomId(7, "abcdefghjkmnpqrstuvwxyz23456789", Character.LOWERCASE_LETTER);
+	}
+
 
 	@Before
 	public void setup() {
-		
 
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+		
+		/**this.getEmail();
+		this.getPassword();
+		
+		RestAssured.port = 8080;
+		token = given().contentType(ContentType.JSON)
+				.body(AuthenticationRequest.builder().username(emailAddress).password(password).build())
+				.when().post("/api/customers/login").andReturn().jsonPath().getString("token");
+		log.debug("Got token:" + token);**/
 
 	}
 
@@ -123,17 +156,12 @@ public class ControllerTestClass {
 		given(mock.findById(department.getDepartmentId())).willReturn(optionalDepartment);
 
 		// Get Department
-		
-		
-		
-		this.mockMvc.perform( MockMvcRequestBuilders
-			      .get("/api/departments/{department_id}", 1)
-			      .accept(MediaType.APPLICATION_JSON))
-			      .andDo(print())
-			      .andExpect(status().isOk())
-			      .andExpect(MockMvcResultMatchers.jsonPath("$.departmentId").value(1));
-		
-		        
+
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.get("/api/departments/{department_id}", 1)
+						.accept(MediaType.APPLICATION_JSON))
+				.andDo(print()).andExpect(status().isOk())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.departmentId").value(1));
 
 	}
 
@@ -169,9 +197,7 @@ public class ControllerTestClass {
 
 		this.mockMvc.perform(get("/api/departments")).andExpect(status().isOk());
 
-				
 	}
-
 
 	/**
 	 * 
@@ -197,11 +223,11 @@ public class ControllerTestClass {
 
 		category.setCategoryId(1);
 		category.setDepartmentId(1);
-		
+
 		category.setName("Africa");
 
 		List<CategoryAllDTO> categories = Arrays.asList(category);
-		
+
 		CategoryService mock = org.mockito.Mockito.mock(CategoryService.class);
 
 		given(mock.getAll()).willReturn(categories);
@@ -232,13 +258,13 @@ public class ControllerTestClass {
 
 		// given
 
-		CategoryDTO category = new CategoryDTO(4, 2, "Our ever-growing selection of beautiful animal T-shirts represents critters from everywhere, "
-				+ "both wild and domestic. If you don't see the T-shirt with the animal you're looking for, tell us and we'll find it!");
-		
+		CategoryDTO category = new CategoryDTO(4, 2,
+				"Our ever-growing selection of beautiful animal T-shirts represents critters from everywhere, "
+						+ "both wild and domestic. If you don't see the T-shirt with the animal you're looking for, tell us and we'll find it!");
+
 		CategoryDTO category2 = new CategoryDTO(5, 2, "Flower", "These unique and beautiful flower T-shirts are"
 				+ " just the item for the gardener, flower arranger, florist, or general lover of things beautiful. "
-				+ "Surprise the flower in your life with one of the beautiful botanical T-shirts or just get a few for yourself!"); 
-			
+				+ "Surprise the flower in your life with one of the beautiful botanical T-shirts or just get a few for yourself!");
 
 		List<CategoryDTO> categories = Arrays.asList(category, category2);
 
@@ -249,8 +275,6 @@ public class ControllerTestClass {
 
 		this.mockMvc.perform(get("/api/categories/inDepartment/{department_id}", 2)).andExpect(status().isOk());
 
-						
-					
 	}
 
 	/**
@@ -333,7 +357,6 @@ public class ControllerTestClass {
 
 	}
 
-	
 	/**
 	 * 
 	 * 
@@ -873,32 +896,9 @@ public class ControllerTestClass {
 
 	}
 
-	/**
-	 * Test a post customer unit testing
-	 * 
-	 * @throws Exception
-	 * @throws JsonProcessingException
-	 * 
-	 * @see {@link com.turing.ecommerce.controllers.ProductController#productOfDepartment(CustomerForm)}.
-	 * 
-	 * @throws MethodArgumentNotValidException
-	 */
-
-	
-
-	/**
-	 * Test a get customer unit testing
-	 * 
-	 * @throws Exception
-	 * @throws JsonProcessingException
-	 * 
-	 * @see {@link com.turing.ecommerce.controllers.CustomerController#getCustomerById(Authentication)}.
-	 * 
-	 * @throws Exception
-	 */
-
 	
 	
+
 	/**
 	 * Test register a customer unit/integrated testing
 	 * 
@@ -914,22 +914,23 @@ public class ControllerTestClass {
 	@Transactional
 	public void testRegisterCustomer() throws Exception {
 
-		//Generate different email for testing
+		// Generate different email for testing
 		String str = Uid.generateRandomId(7, "abcdefghjkmnpqrstuvwxyz23456789", Character.LOWERCASE_LETTER);
 		// Given
+		
+		this.getEmail();
+		this.getPassword();
+		
+		
 		CustomerForm cust = new CustomerForm();
-		cust.setEmail("testingme@yahoo.com");
+		cust.setEmail(this.emailAddress);
 		cust.setName("ThankGod Ukachukwu");
-		cust.setPassword("somtogugu101");
-		
-		
-		
-		Customer customer = new Customer();
-		customer.setEmail("testing@yahoo.com");
-		customer.setName("ThankGod Ukachukwu");
-		customer.setPassword("somtogugu101");
+		cust.setPassword(this.password);
 
-		
+		Customer customer = new Customer();
+		customer.setEmail(this.emailAddress);
+		customer.setName(this.password);
+		customer.setPassword("somtogugu101");
 
 		CustomerService mock = org.mockito.Mockito.mock(CustomerService.class);
 
@@ -939,13 +940,32 @@ public class ControllerTestClass {
 
 		ObjectMapper mapper = new ObjectMapper();
 
-		this.mockMvc.perform(post("/api/customers").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(cust)))
-		.andDo(print()).andExpect(status().isOk());//.andExpect(content().json(mapper.writeValueAsString(customer)));
+		this.mockMvc.perform(
+				post("/api/customers").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(cust)))
+				.andDo(print()).andExpect(status().isOk());// .andExpect(content().json(mapper.writeValueAsString(customer)));
 		
 		
+		
+		
+		RestAssured.port = 8080;
+		token = given().contentType(ContentType.JSON)
+				.body(AuthenticationRequest.builder().username(emailAddress).password(password).build())
+				.when().post("/api/customers/login").andReturn().jsonPath().getString("token");
+		log.debug("Got token:" + token);
 
 	}
-	
+
+	/**
+	 * Test a post customer unit testing
+	 * 
+	 * @throws Exception
+	 * @throws JsonProcessingException
+	 * 
+	 * @see {@link com.turing.ecommerce.controllers.ProductController#productOfDepartment(CustomerForm)}.
+	 * 
+	 * @throws MethodArgumentNotValidException
+	 */
+
 	@Test
 	@Transactional
 	public void testPostCustomer() throws JsonProcessingException, Exception {
@@ -974,14 +994,12 @@ public class ControllerTestClass {
 
 		CustomerUpdateForm cust = new CustomerUpdateForm();
 
-		cust.setEmail("testingme@yahoo.com");
+		cust.setEmail(this.emailAddress);
 		cust.setName("ThankGod Ukachukwu");
-		cust.setPassword("somtogugu101");
+		cust.setPassword(this.password);
 		cust.setDayPhone("+351323213511235");
 		cust.setEvePhone("+452436143246123");
 		cust.setMobPhone("+351323213511235");
-		
-		
 
 		// when + then
 		mockMvc.perform(
@@ -989,35 +1007,35 @@ public class ControllerTestClass {
 				.andDo(print()).andExpect(status().isBadRequest());
 
 	}
+
+	/**
+	 * Test a get customer unit testing
+	 * 
+	 * @throws Exception
+	 * @throws JsonProcessingException
+	 * 
+	 * @see {@link com.turing.ecommerce.controllers.CustomerController#getCustomerById(Authentication)}.
+	 * 
+	 * @throws Exception
+	 */
+
+	
 	
 	@Test
-	@Transactional
-	public void testGetCustomer() throws Exception {
+	public void getCustomer() throws Exception {
+	        //@formatter:off
+	         given()
 
-		// Given
-		Customer cust = new Customer();
-		cust.setEmail("testingme@yahoo.com");
-		cust.setName("ThankGod Ukachukwu");
-		cust.setPassword("somtogugu101");
-		cust.setDayPhone("+351323213511235");
-		cust.setEvePhone("+452436143246123");
-		cust.setMobPhone("+351323213511235");
+	            .accept(ContentType.JSON)
 
-		Optional<Customer> optionalCustomer = Optional.of(cust);
+	        .when()
+	            .get("http://localhost:" + port +"/api/customer")
 
-		CustomerService mock = org.mockito.Mockito.mock(CustomerService.class);
-
-		given(mock.findByEmail(cust.getEmail())).willReturn(optionalCustomer);
-
-		// when + then
-
-		ObjectMapper mapper = new ObjectMapper();
-
-		this.mockMvc.perform(get("/api/customer").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
-				.andExpect(content().json(mapper.writeValueAsString(cust)));
-
-	}
-	
+	        .then()
+	            .assertThat()
+	            .statusCode(200);
+	         //@formatter:on
+	    }
 	
 	
 

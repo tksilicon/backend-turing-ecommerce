@@ -3,6 +3,9 @@
  */
 package com.turing.ecommerce.controllers;
 
+import static java.util.stream.Collectors.toList;
+import static org.springframework.http.ResponseEntity.ok;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -22,6 +25,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
@@ -101,6 +107,8 @@ public class CustomerController {
 
 
 	}
+	
+
 
 	@PostMapping("/api/customers/login")
 	public ResponseEntity<Map<String, Object>> signin(@RequestBody AuthenticationRequest data) {
@@ -142,14 +150,31 @@ public class CustomerController {
 		}
 	}
 
-	@GetMapping("/api/customer")
+	/**@GetMapping("/api/customer")
 	public ResponseEntity<Optional<Customer>> getCustomerById(HttpServletRequest request) throws Exception {
 
 		String token = request.getParameter("USER-KEY");
 		
 		return ResponseEntity.ok(customerService.findByEmail(jwtTokenProvider.getAuthentication(token).getName()));
 
-	}
+	}**/
+	
+	@SuppressWarnings("rawtypes")
+	@GetMapping("/api/customer")
+    public ResponseEntity currentUser(@AuthenticationPrincipal UserDetails userDetails){
+        Map<Object, Object> model = new HashMap<>();
+        
+        
+        Optional<Customer> cust = this.users.findByEmail(userDetails.getUsername());
+        model.put("customer", cust);
+        model.put("username", userDetails.getUsername());
+        model.put("roles", userDetails.getAuthorities()
+            .stream()
+            .map(a -> ((GrantedAuthority) a).getAuthority())
+            .collect(toList())
+        );
+        return ok(model);
+    }
 
 	/*
 	 * API endpoint to register customers
@@ -263,5 +288,7 @@ public class CustomerController {
 		}
 
 	}
+	
+	
 
 }
