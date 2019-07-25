@@ -884,7 +884,69 @@ public class ControllerTestClass {
 	 * @throws MethodArgumentNotValidException
 	 */
 
-	@Ignore
+	
+
+	/**
+	 * Test a get customer unit testing
+	 * 
+	 * @throws Exception
+	 * @throws JsonProcessingException
+	 * 
+	 * @see {@link com.turing.ecommerce.controllers.CustomerController#getCustomerById(Authentication)}.
+	 * 
+	 * @throws Exception
+	 */
+
+	
+	
+	/**
+	 * Test register a customer unit/integrated testing
+	 * 
+	 * @throws Exception
+	 * 
+	 * 
+	 * @see {@link com.turing.ecommerce.controllers.CustomerController#registerCustomer(CustomerForm}.
+	 * 
+	 * @throws Exception
+	 */
+
+	@Test
+	@Transactional
+	public void testRegisterCustomer() throws Exception {
+
+		//Generate different email for testing
+		String str = Uid.generateRandomId(7, "abcdefghjkmnpqrstuvwxyz23456789", Character.LOWERCASE_LETTER);
+		// Given
+		CustomerForm cust = new CustomerForm();
+		cust.setEmail("testingme@yahoo.com");
+		cust.setName("ThankGod Ukachukwu");
+		cust.setPassword("somtogugu101");
+		
+		
+		
+		Customer customer = new Customer();
+		customer.setEmail("testing@yahoo.com");
+		customer.setName("ThankGod Ukachukwu");
+		customer.setPassword("somtogugu101");
+
+		
+
+		CustomerService mock = org.mockito.Mockito.mock(CustomerService.class);
+
+		given(mock.findByEmail(cust.getEmail())).willReturn(Optional.of(customer));
+
+		// when + then
+
+		ObjectMapper mapper = new ObjectMapper();
+
+		this.mockMvc.perform(post("/api/customers").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(cust)))
+		.andDo(print()).andExpect(status().isOk());//.andExpect(content().json(mapper.writeValueAsString(customer)));
+		
+		
+
+	}
+	
+	@Test
 	@Transactional
 	public void testPostCustomer() throws JsonProcessingException, Exception {
 		ObjectMapper mapper = new ObjectMapper();
@@ -912,12 +974,14 @@ public class ControllerTestClass {
 
 		CustomerUpdateForm cust = new CustomerUpdateForm();
 
-		cust.setName("Lannucci");
-		cust.setEmail("lannucci@hotmail.com");
-		cust.setPassword("Lannucci");
+		cust.setEmail("testingme@yahoo.com");
+		cust.setName("ThankGod Ukachukwu");
+		cust.setPassword("somtogugu101");
 		cust.setDayPhone("+351323213511235");
 		cust.setEvePhone("+452436143246123");
 		cust.setMobPhone("+351323213511235");
+		
+		
 
 		// when + then
 		mockMvc.perform(
@@ -925,41 +989,19 @@ public class ControllerTestClass {
 				.andDo(print()).andExpect(status().isBadRequest());
 
 	}
-
-	/**
-	 * Test a get customer unit testing
-	 * 
-	 * @throws Exception
-	 * @throws JsonProcessingException
-	 * 
-	 * @see {@link com.turing.ecommerce.controllers.CustomerController#getCustomerById(Authentication)}.
-	 * 
-	 * @throws Exception
-	 */
-
-	@Ignore
+	
+	@Test
 	@Transactional
 	public void testGetCustomer() throws Exception {
 
 		// Given
 		Customer cust = new Customer();
-		cust.setCustomerId(1);
-		cust.setName("Lannucci");
-		cust.setPassword("Lannucci");
-		cust.setEmail("lannucci@hotmail.com");
-		cust.setAddress1("QI 19");
-		cust.setAddress2("");
-		cust.setCity("");
-		cust.setRegion("");
-		cust.setPostalCode("");
-		cust.setCountry("");
-		cust.setShippingRegionId(1);
+		cust.setEmail("testingme@yahoo.com");
+		cust.setName("ThankGod Ukachukwu");
+		cust.setPassword("somtogugu101");
 		cust.setDayPhone("+351323213511235");
 		cust.setEvePhone("+452436143246123");
 		cust.setMobPhone("+351323213511235");
-		cust.setCreditCard("XXXXXXXX5100");
-		cust.setCreditCard("XXXXXXXX5100");
-		cust.setCreditCard("5338530810772366");
 
 		Optional<Customer> optionalCustomer = Optional.of(cust);
 
@@ -973,53 +1015,6 @@ public class ControllerTestClass {
 
 		this.mockMvc.perform(get("/api/customer").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
 				.andExpect(content().json(mapper.writeValueAsString(cust)));
-
-	}
-	
-	/**
-	 * Test register a customer unit/integrated testing
-	 * 
-	 * @throws Exception
-	 * 
-	 * 
-	 * @see {@link com.turing.ecommerce.controllers.CustomerController#registerCustomer(CustomerForm}.
-	 * 
-	 * @throws Exception
-	 */
-
-	@Test
-	@Transactional
-	public void testRegisterCustomer() throws Exception {
-
-		//Generate different email for testing
-		String str = Uid.generateRandomId(7, "abcdefghjkmnpqrstuvwxyz23456789", Character.LOWERCASE_LETTER);
-		// Given
-		CustomerForm cust = new CustomerForm();
-		cust.setEmail(str+"@yahoo.com");
-		cust.setName("ThankGod Ukachukwu");
-		cust.setPassword("somtogugu101");
-		
-		
-		
-		Customer customer = new Customer();
-		customer.setEmail(str+"@yahoo.com");
-		customer.setName("ThankGod Ukachukwu");
-		customer.setPassword("somtogugu101");
-
-		
-
-		CustomerService mock = org.mockito.Mockito.mock(CustomerService.class);
-
-		given(mock.findByEmail(cust.getEmail())).willReturn(Optional.of(customer));
-
-		// when + then
-
-		ObjectMapper mapper = new ObjectMapper();
-
-		this.mockMvc.perform(post("/api/customers").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(cust)))
-		.andDo(print()).andExpect(status().isOk());//.andExpect(content().json(mapper.writeValueAsString(customer)));
-		
-		
 
 	}
 	

@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,9 +99,6 @@ public class CustomerController {
 			throw new BadCredentialsException("Token expired");
 		}
 
-		
-
-		
 
 	}
 
@@ -145,9 +143,11 @@ public class CustomerController {
 	}
 
 	@GetMapping("/api/customer")
-	public ResponseEntity<Optional<Customer>> getCustomerById(Authentication authentication) throws Exception {
+	public ResponseEntity<Optional<Customer>> getCustomerById(HttpServletRequest request) throws Exception {
 
-		return ResponseEntity.ok(customerService.findByEmail(authentication.getName()));
+		String token = request.getParameter("USER-KEY");
+		
+		return ResponseEntity.ok(customerService.findByEmail(jwtTokenProvider.getAuthentication(token).getName()));
 
 	}
 
