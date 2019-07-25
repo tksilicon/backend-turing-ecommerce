@@ -29,6 +29,13 @@ public class Customer implements UserDetails, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@TableGenerator(name="TABLE_GEN",table="T_GENERATOR",
+	pkColumnName="GEN_KEY",
+	valueColumnName="GEN_VALUE",
+	pkColumnValue="CUST_ID",
+	initialValue=1,allocationSize=1)
+	 
+	@GeneratedValue(strategy=GenerationType.TABLE, generator="TABLE_GEN")
 	@Column(name="customer_id")
 	private int customerId;
 	
