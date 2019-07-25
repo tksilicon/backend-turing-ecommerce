@@ -236,7 +236,7 @@ public class CustomerController {
 	 */
 	@PutMapping(path = "/api/customers/address")
 	public ResponseEntity<Customer> updateCustomerAddress(@Valid @RequestBody CustomerAddressForm cust,
-			Authentication authentication) {
+			@AuthenticationPrincipal UserDetails userDetails) {
 		try {
 
 			// HttpServletRequest request) {
@@ -244,7 +244,7 @@ public class CustomerController {
 			// return principal.getName();
 			Customer existed =
 
-					customerService.findByEmail(authentication.getName())
+					customerService.findByEmail(userDetails.getUsername())
 							.orElseThrow(() -> new CustomerNotFoundException());
 
 			existed.setAddress1(cust.getAddress2());
@@ -271,12 +271,12 @@ public class CustomerController {
 	 */
 	@PutMapping(path = "/api/customers/creditCard")
 	public ResponseEntity<Customer> updateCustomerCreditCard(@Valid @RequestBody CustomerCreditCardForm cust,
-			Authentication authentication) {
+			UserDetails userDetails) {
 		try {
 
 			Customer existed =
 
-					customerService.findByEmail(authentication.getName())
+					customerService.findByEmail(userDetails.getUsername())
 							.orElseThrow(() -> new CustomerNotFoundException());
 
 			existed.setCreditCard(cust.getCreditCard());
