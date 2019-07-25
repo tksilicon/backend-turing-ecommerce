@@ -50,7 +50,7 @@ import com.turing.ecommerce.utils.Uid;;
 @RestController
 public class CartController {
 
-	@Resource(name = "CartServiceImpl")
+	@Resource(name = "cartServiceImpl")
 	private CartService cartService;
 
 	/**
