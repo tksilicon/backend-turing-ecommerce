@@ -30,9 +30,7 @@ public class ChargeRequest {
     private int amount; 
     // cents
     private Currency currency;
-    @NotEmpty(message = "Review cannot be emply")
-   	@NotBlank(message = "Review cannot be emply")
-    private String stripeEmail;
+    
     
     @NotEmpty(message = "Review cannot be emply")
    	@NotBlank(message = "Review cannot be emply")
