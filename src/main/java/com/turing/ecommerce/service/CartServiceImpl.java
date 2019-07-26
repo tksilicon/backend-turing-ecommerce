@@ -4,10 +4,13 @@
 package com.turing.ecommerce.service;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.turing.ecommerce.DTO.ItemForm;
 import com.turing.ecommerce.DTO.ProductDetailsDTO;
 import com.turing.ecommerce.DTO.SavedItem;
+import com.turing.ecommerce.DTO.ShoppingCartForm;
 import com.turing.ecommerce.DTO.ShoppingCartProduct;
+import com.turing.ecommerce.exceptions.CartNotFoundException;
+import com.turing.ecommerce.exceptions.ProductNotFoundException;
 import com.turing.ecommerce.model.Order;
 import com.turing.ecommerce.model.Product;
 import com.turing.ecommerce.model.ShoppingCart;
@@ -62,13 +68,26 @@ public class CartServiceImpl implements CartService {
 	 */
 	@Transactional
 	@Override
-	public List<ShoppingCartProduct> getShoppingCartProducts(ShoppingCart cart) {
+	public List<ShoppingCartProduct> getShoppingCartProducts(ShoppingCartForm cart) {
+		
+		ShoppingCart cartItem = new ShoppingCart();
+		cartItem.setCartId(cart.getCartId());
+		cartItem.setAttributes(cart.getAttributes());
+		cartItem.setProductId(cart.getProductId());
+		
+		Date date = new Date();
+		cartItem.setAddedOn(date);
+		
+		cartItem.setQuantity(1);
+		
+		
 
 		List<ShoppingCartProduct> shoppingCartToReturn = new LinkedList<ShoppingCartProduct>();
 
-		ShoppingCart sp = cartRepository.save(cart);
+		ShoppingCart sp = cartRepository.save(cartItem);
 
-		List<ShoppingCart> cartNow = cartRepository.findByCartId(cart.getCartId());
+		List<ShoppingCart> cartNow = cartRepository.findByCartId(sp.getCartId());
+
 
 		Iterator<ShoppingCart> cartIt = cartNow.iterator();
 
@@ -107,7 +126,17 @@ public class CartServiceImpl implements CartService {
 	@Transactional
 	@Override
 	public List<ShoppingCartProduct> getShoppingCartProducts2(String cartId) {
-		List<ShoppingCart> cartNow = cartRepository.findByCartId(cartId);
+		List<ShoppingCart> cartNow = null;
+
+		try {
+
+			cartNow = cartRepository.findByCartId(cartId);
+
+		} catch (EntityNotFoundException ex) {
+			throw new CartNotFoundException("Cart Not found");
+
+		}
+		
 
 		List<ShoppingCartProduct> shoppingCartToReturn = new LinkedList<ShoppingCartProduct>();
 		Iterator<ShoppingCart> cartIt = cartNow.iterator();
@@ -137,8 +166,6 @@ public class CartServiceImpl implements CartService {
 		return shoppingCartToReturn;
 	}
 
-	
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -148,9 +175,8 @@ public class CartServiceImpl implements CartService {
 	@Transactional
 	@Override
 	public void moveItemToCart(Integer itemId) {
-		
+
 		cartRepository.itemToCart(itemId);
-		
 
 	}
 
@@ -163,30 +189,23 @@ public class CartServiceImpl implements CartService {
 	 */
 	@Override
 	public BigDecimal returnTotalAmountCart(String cartId) {
-		
-		
+
 		List<ShoppingCart> cartNow = cartRepository.findByCartId(cartId);
 
-		
 		Iterator<ShoppingCart> cartIt = cartNow.iterator();
-		
-		BigDecimal total  = new BigDecimal(0.00);
+
+		BigDecimal total = new BigDecimal(0.00);
 
 		while (cartIt.hasNext()) {
 			ShoppingCart sc = cartIt.next();
 
-			
-
 			Optional<ProductDetailsDTO> pdo = productRepository.getProductDetails(sc.getProductId());
-			
+
 			BigDecimal bd = pdo.get().getPrice();
 			Integer quant = sc.getQuantity();
-            
 
 			BigDecimal itemtotal = bd.multiply(new BigDecimal(quant));
 			total.add(itemtotal);
-
-			
 
 		}
 
@@ -200,8 +219,8 @@ public class CartServiceImpl implements CartService {
 	 */
 	@Override
 	public void saveForLater(Integer itemId) {
-		
-		 cartRepository.saveItemForLater(itemId);
+
+		cartRepository.saveItemForLater(itemId);
 	}
 
 	/*
@@ -211,13 +230,10 @@ public class CartServiceImpl implements CartService {
 	 */
 	@Override
 	public List<SavedItem> getSaved(String cartId) {
-		
+
 		return cartRepository.getSavedItems(cartId);
 	}
 
-	
-
-	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -272,40 +288,43 @@ public class CartServiceImpl implements CartService {
 	 * 
 	 * Empty Cart
 	 * 
-	 * @see com.turing.ecommerce.service.CartService#delete(java.lang.
-	 * String)
+	 * @see com.turing.ecommerce.service.CartService#delete(java.lang. String)
 	 */
-	
+
 	@Transactional
 	@Override
 	public List<ShoppingCartProduct> delete(String cartId) {
-		
+
 		List<ShoppingCart> cartNow = cartRepository.findByCartId(cartId);
-		
+
 		Iterator<ShoppingCart> cartIt = cartNow.iterator();
-		
+
 		while (cartIt.hasNext()) {
 			ShoppingCart sc = cartIt.next();
 
 			cartRepository.delete(sc);
 
 		}
-		
+
 		List<ShoppingCartProduct> shoppingCartToReturn = new LinkedList<ShoppingCartProduct>();
 
 		return shoppingCartToReturn;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.turing.ecommerce.service.CartService#updateCart(java.lang.Integer)
 	 */
 	@Override
 	public void updateCart(Integer itemId, String cartId) {
 		cartRepository.removeItem(itemId, null);
-		
+
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.turing.ecommerce.service.CartService#getProduct(java.lang.Integer)
 	 */
 	@Override
@@ -313,10 +332,5 @@ public class CartServiceImpl implements CartService {
 		// TODO Auto-generated method stub
 		return productRepository.getProductDetails(productId);
 	}
-	
-	
-	
-	
-	
 
 }

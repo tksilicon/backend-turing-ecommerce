@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -84,7 +83,7 @@ public class TurningAppExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler( CustomerNotFoundException.class)
 	public final ResponseEntity<ApiErrorResponse> handleConstraintViolationPostCustomer(CustomerNotFoundException ex) {
 
-		ApiErrorResponse errorResponse = new ApiErrorResponse("USR_21", "Malformed JSON request Post Customer",
+		ApiErrorResponse errorResponse = new ApiErrorResponse("USR_21", ex.getMessage(),
 				"JSon String", String.valueOf(HttpStatus.BAD_REQUEST));
 
 		return new ResponseEntity<ApiErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -284,6 +283,19 @@ public class TurningAppExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return new ResponseEntity<ApiErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
+	
+	
+	 /**
+     * Handle javax.persistence.EntityNotFoundException
+     */
+    @ExceptionHandler(javax.persistence.EntityNotFoundException.class)
+    protected ResponseEntity<Object> handleEntityNotFound(javax.persistence.EntityNotFoundException ex) {
+    	ApiErrorResponse errorResponse = new ApiErrorResponse("CAT_01", ex.getMessage(),
+				ex.getCause().getMessage(), String.valueOf(HttpStatus.BAD_REQUEST));
+
+		return new ResponseEntity<Object>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+    
 	
 
 }

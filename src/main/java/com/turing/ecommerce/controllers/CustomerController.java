@@ -88,13 +88,14 @@ public class CustomerController {
 		try {
 		Customer existed =
 
-				customerService.findByEmail(cust.getEmail()).orElseThrow(() -> new CustomerNotFoundException());
+				customerService.findByEmail(cust.getEmail()).orElseThrow(() -> 
+				new CustomerNotFoundException("(Update customer failed"));
 
 		existed.setName(cust.getName());
 		existed.setEmail(cust.getEmail());
-		existed.setPassword(cust.getPassword());
+		//existed.setPassword(cust.getPassword());
 		
-		//existed.setPassword(passwordEncoder.encode(cust.getPassword()));
+		existed.setPassword(passwordEncoder.encode(cust.getPassword()));
 		existed.setDayPhone(cust.getDayPhone());
 		existed.setEvePhone(cust.getEvePhone());
 		existed.setMobPhone(cust.getMobPhone());

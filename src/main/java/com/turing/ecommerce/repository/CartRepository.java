@@ -24,6 +24,7 @@ public interface CartRepository extends CrudRepository<ShoppingCart, Integer> {
 	public Integer findMaxItemId();
 	
 	public List<ShoppingCart> findByCartId(String cartId);
+	
 	public ShoppingCart findByItemId(int itemId);
 	
 

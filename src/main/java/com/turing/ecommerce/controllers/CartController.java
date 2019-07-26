@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -34,8 +35,10 @@ import com.turing.ecommerce.DTO.ProductDetailsDTO;
 import com.turing.ecommerce.DTO.SavedItem;
 import com.turing.ecommerce.DTO.ShoppingCartForm;
 import com.turing.ecommerce.DTO.ShoppingCartProduct;
+import com.turing.ecommerce.exceptions.CartNotFoundException;
 import com.turing.ecommerce.exceptions.CustomerExistException;
 import com.turing.ecommerce.exceptions.CustomerNotFoundException;
+import com.turing.ecommerce.exceptions.ItemNotFoundException;
 import com.turing.ecommerce.exceptions.ProductNotFoundException;
 import com.turing.ecommerce.model.Attribute;
 import com.turing.ecommerce.model.Customer;
@@ -44,7 +47,7 @@ import com.turing.ecommerce.service.CartService;
 import com.turing.ecommerce.utils.Uid;;
 
 /**
- * @author frankukachukwu
+ * @author thankgodukachukwu
  *
  */
 @RestController
@@ -86,7 +89,7 @@ public class CartController {
 
 		scp.setAddedOn(date);
 
-		List<ShoppingCartProduct> ourCart = cartService.getShoppingCartProducts(scp);
+		List<ShoppingCartProduct> ourCart = cartService.getShoppingCartProducts(cart);
 
 		return ResponseEntity.ok(ourCart);
 
@@ -101,7 +104,13 @@ public class CartController {
 	public ResponseEntity<List<ShoppingCartProduct>> getShoppingCart(
 			@PathVariable(name = "cart_id", required = true) String cartId) {
 
-		return ResponseEntity.ok(cartService.getShoppingCartProducts2(cartId));
+		try {
+			return ResponseEntity.ok(cartService.getShoppingCartProducts2(cartId));
+		} catch (EntityNotFoundException ex) {
+			throw new CartNotFoundException("Cart Not found");
+
+		}
+
 	}
 
 	/*
@@ -110,9 +119,12 @@ public class CartController {
 	@PutMapping(path = "/api/shoppingcart/update/{item_id}")
 	public ResponseEntity<List<ShoppingCartProduct>> updateItemInCart(
 			@PathVariable(name = "item_id", required = true) Integer itemId, @Valid @RequestBody ItemForm quant) {
+		try {
+			return ResponseEntity.ok(cartService.getSavedItemInCart(itemId, quant));
+		} catch (EntityNotFoundException ex) {
+			throw new ItemNotFoundException("Cart Not found");
 
-		return ResponseEntity.ok(cartService.getSavedItemInCart(itemId, quant));
-
+		}
 	}
 
 	/*
@@ -127,31 +139,30 @@ public class CartController {
 		try {
 			returnCart = cartService.delete(cartId);
 			return ResponseEntity.ok(returnCart);
-		} catch (ResourceNotFoundException e) {
-			return ResponseEntity.ok(returnCart);
+		} catch (EntityNotFoundException ex) {
+			throw new CartNotFoundException("Cart Not found");
+
 		}
 
 	}
-	
+
 	/*
 	 * API endpoint to move item to cart
 	 */
 	@GetMapping(path = "/api/shoppingcart/moveToCart/{item_id}")
-	public ResponseEntity moveToCart(
-			@PathVariable(name = "item_id", required = true) Integer itemId) {
-
-		
+	public ResponseEntity moveToCart(@PathVariable(name = "item_id", required = true) Integer itemId) {
 
 		try {
-			 cartService.moveItemToCart(itemId);
-			 
+			cartService.moveItemToCart(itemId);
+
 			return ResponseEntity.ok().build();
-		} catch (ResourceNotFoundException e) {
-			return ResponseEntity.ok().build();
+		} catch (EntityNotFoundException ex) {
+			throw new ItemNotFoundException("Item Not found");
+
 		}
 
 	}
-	
+
 	/*
 	 * API endpoint to get total amount
 	 */
@@ -162,36 +173,46 @@ public class CartController {
 		BigDecimal dec = cartService.returnTotalAmountCart(cartId);
 		Map<String, BigDecimal> map = new HashMap<String, BigDecimal>();
 		map.put("total_amount", dec);
-		
-		return ResponseEntity.ok(map);
+		try {
+			return ResponseEntity.ok(map);
+
+		} catch (EntityNotFoundException ex) {
+			throw new CartNotFoundException("Cart Not found");
+
+		}
+
 	}
-	
+
 	/*
 	 * API endpoint to get total amount
 	 */
 	@GetMapping(path = "/api/shoppingcart/saveForLater/{item_id}")
-	public ResponseEntity saveForLater(
-			@PathVariable(name = "item_id}", required = true) Integer itemId) {
+	public ResponseEntity saveForLater(@PathVariable(name = "item_id}", required = true) Integer itemId) {
 
 		cartService.saveForLater(itemId);
-		
-		return ResponseEntity.ok().build();
+		try {
+			return ResponseEntity.ok().build();
+		} catch (EntityNotFoundException ex) {
+			throw new ItemNotFoundException("Item Not found");
+
+		}
+
 	}
-	
-	
+
 	/*
 	 * API endpoint to get SavedItems
 	 */
 	@GetMapping(path = "/api/shoppingcart/getSaved/{cart_id}")
-	public ResponseEntity<List<SavedItem>> getSaved(
-			@PathVariable(name = "cart_id", required = true) String cartId) {
+	public ResponseEntity<List<SavedItem>> getSaved(@PathVariable(name = "cart_id", required = true) String cartId) {
+		try {
+			return ResponseEntity.ok(cartService.getSaved(cartId));
+		} catch (EntityNotFoundException ex) {
+			throw new CartNotFoundException("Cart Not found");
 
-		
-		
-		return ResponseEntity.ok(cartService.getSaved(cartId));
+		}
+
 	}
-	
-	
+
 	/*
 	 * API endpoint to remove Items in cart
 	 */
@@ -199,21 +220,14 @@ public class CartController {
 	public ResponseEntity<List<ShoppingCartProduct>> removeProduct(
 			@PathVariable(name = "item_id", required = true) Integer itemId) {
 
-		
-
 		try {
 			cartService.updateCart(itemId, null);
 			return ResponseEntity.ok().build();
-		} catch (ResourceNotFoundException e) {
-			return ResponseEntity.ok().build();
+		} catch (EntityNotFoundException ex) {
+			throw new ItemNotFoundException("Item Not found");
+
 		}
 
 	}
-	
-	
-	
-
-	
-	
 
 }

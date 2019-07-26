@@ -42,6 +42,8 @@ public class ShoppingCartProduct {
 	
 	//calculated
 	private BigDecimal subtotal;
+	
+	
 
 	
 

@@ -18,10 +18,14 @@ import com.turing.ecommerce.DTO.ProductDetailsDTO;
 import com.turing.ecommerce.DTO.ProductLocationsDTO;
 import com.turing.ecommerce.DTO.ProductReviewDTO;
 import com.turing.ecommerce.DTO.ReviewDTO;
+import com.turing.ecommerce.DTO.ShoppingCartForm;
+import com.turing.ecommerce.DTO.ShoppingCartProduct;
 import com.turing.ecommerce.model.Customer;
 import com.turing.ecommerce.model.Product;
+import com.turing.ecommerce.model.ShoppingCart;
 import com.turing.ecommerce.service.AttributeDAOService;
 import com.turing.ecommerce.service.AttributesService;
+import com.turing.ecommerce.service.CartService;
 import com.turing.ecommerce.service.CategoryService;
 import com.turing.ecommerce.service.CustomerService;
 import com.turing.ecommerce.service.DepartmentService;
@@ -38,6 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -119,14 +124,14 @@ public class ControllerTestClass {
 
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
 		
-		/**this.getEmail();
+		this.getEmail();
 		this.getPassword();
 		
 		RestAssured.port = 8080;
 		token = given().contentType(ContentType.JSON)
 				.body(AuthenticationRequest.builder().username(emailAddress).password(password).build())
 				.when().post("/api/customers/login").andReturn().jsonPath().getString("token");
-		log.debug("Got token:" + token);**/
+		log.debug("Got token:" + token);
 
 	}
 
@@ -914,8 +919,6 @@ public class ControllerTestClass {
 	@Transactional
 	public void testRegisterCustomer() throws Exception {
 
-		// Generate different email for testing
-		String str = Uid.generateRandomId(7, "abcdefghjkmnpqrstuvwxyz23456789", Character.LOWERCASE_LETTER);
 		// Given
 		
 		this.getEmail();
@@ -946,13 +949,6 @@ public class ControllerTestClass {
 		
 		
 		
-		
-		RestAssured.port = 8080;
-		token = given().contentType(ContentType.JSON)
-				.body(AuthenticationRequest.builder().username(emailAddress).password(password).build())
-				.when().post("/api/customers/login").andReturn().jsonPath().getString("token");
-		log.debug("Got token:" + token);
-
 	}
 
 	/**
@@ -968,35 +964,22 @@ public class ControllerTestClass {
 
 	@Test
 	@Transactional
-	public void testPostCustomer() throws JsonProcessingException, Exception {
+	public void testUpdateCustomer() throws JsonProcessingException, Exception {
 		ObjectMapper mapper = new ObjectMapper();
-		// Sample
-		/**
-		 * 
-		 * "customer_id": 1, "name": "Lannucci", "email": "lannucci@hotmail.com",
-		 * "address_1": "QI 19", "address_2": "", "city": "", "region": "",
-		 * "postal_code": "", "country": "", "shipping_region_id": 1, "day_phone":
-		 * "+351323213511235", "eve_phone": "+452436143246123", "mob_phone":
-		 * "+351323213511235", "credit_card": "XXXXXXXX5100"
-		 **/
+		
 
-		// Given
-		/**
-		 * Customer cust = new Customer(); cust.setCustomerId(1);
-		 * cust.setName("Lannucci"); cust.setPassword("Lannucci");
-		 * cust.setEmail("lannucci@hotmail.com"); cust.setAddress1("QI 19");
-		 * cust.setAddress2(""); cust.setCity(""); cust.setRegion("");
-		 * cust.setPostalCode(""); cust.setCountry(""); cust.setShippingRegionId(1);
-		 * cust.setDayPhone("+351323213511235"); cust.setEvePhone("+452436143246123");
-		 * cust.setMobPhone("+351323213511235"); cust.setCreditCard("XXXXXXXX5100");
-		 * cust.setCreditCard("XXXXXXXX5100"); cust.setCreditCard("5338530810772366");
-		 **/
+		RestAssured.port = 8080;
+		token = given().contentType(ContentType.JSON)
+				.body(AuthenticationRequest.builder().username("testingme2@yahoo.com").password("passme").build())
+				.when().post("/api/customers/login").andReturn().jsonPath().getString("token");
+		log.debug("Got token:" + token);
+		
 
 		CustomerUpdateForm cust = new CustomerUpdateForm();
 
-		cust.setEmail(this.emailAddress);
+		cust.setEmail("testingme2@yahoo.com");
 		cust.setName("ThankGod Ukachukwu");
-		cust.setPassword(this.password);
+		cust.setPassword("passme");
 		cust.setDayPhone("+351323213511235");
 		cust.setEvePhone("+452436143246123");
 		cust.setMobPhone("+351323213511235");
@@ -1004,7 +987,7 @@ public class ControllerTestClass {
 		// when + then
 		mockMvc.perform(
 				put("/api/customer").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(cust)))
-				.andDo(print()).andExpect(status().isBadRequest());
+				.andDo(print()).andExpect(status().isOk());
 
 	}
 
@@ -1037,6 +1020,65 @@ public class ControllerTestClass {
 	         //@formatter:on
 	    }
 	
+
+	/**
+	 * Test add to cart unit/integrated testing
+	 * 
+	 * @throws Exception
+	 * 
+	 * 
+	 * @see {@link com.turing.ecommerce.controllers.CustomerController#registerCustomer(CustomerForm}.
+	 * 
+	 * @throws Exception
+	 */
+
+	private String carttId = null;
+	@Test
+	@Transactional
+	public void testAddToCart() throws Exception {
+
+		// Generate different email for testing
+		this.carttId = Uid.generateRandomId(7, "abcdefghjkmnpqrstuvwxyz23456789", Character.LOWERCASE_LETTER);
+		// Given
+		
+		this.getEmail();
+		this.getPassword();
+		
+		
+		ShoppingCartForm cartItem = new ShoppingCartForm();
+		cartItem.setCartId(this.carttId);
+		cartItem.setAttributes("LG, red");
+		cartItem.setProductId(2);
+		
+
+		
+		
+		
+		ShoppingCartProduct scp = new ShoppingCartProduct();
+		scp.setAttributes("LG, red");
+		scp.setProductId(2);
+		
+
+		CartService mock = org.mockito.Mockito.mock(CartService.class);
+		
+		List<ShoppingCartProduct>  list = Arrays.asList(scp);
+		
+
+		given(mock.getShoppingCartProducts(cartItem)).willReturn(list);
+
+		// when + then
+
+		ObjectMapper mapper = new ObjectMapper();
+
+		this.mockMvc.perform(
+				post("/api/shoppingcart/add").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(cartItem)))
+				.andDo(print()).andExpect(status().isOk());// .andExpect(content().json(mapper.writeValueAsString(customer)));
+		
+		
+		
+		
 	
+	}
+
 
 }

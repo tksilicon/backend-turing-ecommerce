@@ -10,6 +10,7 @@ import java.util.Optional;
 import com.turing.ecommerce.DTO.ItemForm;
 import com.turing.ecommerce.DTO.ProductDetailsDTO;
 import com.turing.ecommerce.DTO.SavedItem;
+import com.turing.ecommerce.DTO.ShoppingCartForm;
 import com.turing.ecommerce.DTO.ShoppingCartProduct;
 import com.turing.ecommerce.model.ShoppingCart;
 
@@ -20,7 +21,7 @@ import com.turing.ecommerce.model.ShoppingCart;
 public interface CartService {
 	
 	public ShoppingCart save(ShoppingCart cart);
-	public List<ShoppingCartProduct> getShoppingCartProducts(ShoppingCart cart);
+	public List<ShoppingCartProduct> getShoppingCartProducts(ShoppingCartForm cart);
 	public List<ShoppingCartProduct> getShoppingCartProducts2(String cartId);
 	public List<ShoppingCartProduct> getSavedItemInCart(int itemId, ItemForm quant);
 	public List<ShoppingCartProduct> delete(String cartId);
