@@ -4,12 +4,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stripe.model.Charge;
 import com.turing.ecommerce.DTO.AttributeDTO;
 import com.turing.ecommerce.DTO.AttributesProductDTO;
 import com.turing.ecommerce.DTO.AuthenticationRequest;
 import com.turing.ecommerce.DTO.CategoryAllDTO;
 import com.turing.ecommerce.DTO.CategoryDTO;
 import com.turing.ecommerce.DTO.CategoryProductDTO;
+import com.turing.ecommerce.DTO.ChargeRequest;
+import com.turing.ecommerce.DTO.ChargeRequest.Currency;
 import com.turing.ecommerce.DTO.CustomerForm;
 import com.turing.ecommerce.DTO.CustomerUpdateForm;
 import com.turing.ecommerce.DTO.DepartmentDTO;
@@ -31,6 +34,7 @@ import com.turing.ecommerce.service.CustomerService;
 import com.turing.ecommerce.service.DepartmentService;
 import com.turing.ecommerce.service.ProdCatDAOService;
 import com.turing.ecommerce.service.ProductService;
+import com.turing.ecommerce.service.StripeService;
 import com.turing.ecommerce.utils.Uid;
 
 import io.restassured.RestAssured;
@@ -95,7 +99,7 @@ public class ControllerTestClass {
 	private WebApplicationContext wac;
 
 	private MockMvc mockMvc;
-	
+
 	@LocalServerPort
 	int port;
 
@@ -103,34 +107,34 @@ public class ControllerTestClass {
 	ObjectMapper objectMapper;
 
 	private String token;
-	
+
 	private String emailAddress;
 	private String password;
+
 	public String getEmail() {
 		// Generate different email for testing
 		String str = Uid.generateRandomId(7, "abcdefghjkmnpqrstuvwxyz23456789", Character.LOWERCASE_LETTER);
 		emailAddress = str + "@gmail.com";
 		return emailAddress;
-				
+
 	}
-	
+
 	public String getPassword() {
 		return password = Uid.generateRandomId(7, "abcdefghjkmnpqrstuvwxyz23456789", Character.LOWERCASE_LETTER);
 	}
-
 
 	@Before
 	public void setup() {
 
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
-		
+
 		this.getEmail();
 		this.getPassword();
-		
+
 		RestAssured.port = 8080;
 		token = given().contentType(ContentType.JSON)
-				.body(AuthenticationRequest.builder().username(emailAddress).password(password).build())
-				.when().post("/api/customers/login").andReturn().jsonPath().getString("token");
+				.body(AuthenticationRequest.builder().username(emailAddress).password(password).build()).when()
+				.post("/api/customers/login").andReturn().jsonPath().getString("token");
 		log.debug("Got token:" + token);
 
 	}
@@ -143,7 +147,7 @@ public class ControllerTestClass {
 	 * 
 	 **/
 
-	@Ignore
+	@Test
 	@Transactional
 	public void testGetDepartment() throws Exception {
 
@@ -179,7 +183,7 @@ public class ControllerTestClass {
 	 * 
 	 */
 
-	@Ignore
+	@Test
 	@Transactional
 	public void testGetDepartments() throws Exception {
 
@@ -218,7 +222,7 @@ public class ControllerTestClass {
 	 * 
 	 */
 
-	@Ignore
+	@Test
 	@Transactional
 	public void testGetCategory() throws Exception {
 
@@ -257,7 +261,7 @@ public class ControllerTestClass {
 	 * 
 	 */
 
-	@Ignore
+	@Test
 	@Transactional
 	public void testGetCategoryByDepartmentId() throws Exception {
 
@@ -297,7 +301,7 @@ public class ControllerTestClass {
 	 * 
 	 */
 
-	@Ignore
+	@Test
 	@Transactional
 	public void testGetCategoryByProductId() throws Exception {
 
@@ -333,7 +337,7 @@ public class ControllerTestClass {
 	 * 
 	 * 
 	 */
-	@Ignore
+	@Test
 	@Transactional
 	public void testGetAttribute() throws Exception {
 
@@ -371,7 +375,7 @@ public class ControllerTestClass {
 	 * 
 	 */
 
-	@Ignore
+	@Test
 	@Transactional
 	public void testGetAttributess() throws Exception {
 
@@ -410,7 +414,7 @@ public class ControllerTestClass {
 	 * 
 	 */
 
-	@Ignore
+	@Test
 	@Transactional
 	public void testGetValuesByAttributeId() throws Exception {
 
@@ -451,7 +455,7 @@ public class ControllerTestClass {
 	 * 
 	 */
 
-	@Ignore
+	@Test
 	@Transactional
 	public void testGetAttributeValuesByProductId() throws Exception {
 
@@ -502,7 +506,7 @@ public class ControllerTestClass {
 	 * 
 	 */
 
-	@Ignore
+	@Test
 	@Transactional
 	public void testGetProducts() throws Exception {
 
@@ -564,7 +568,7 @@ public class ControllerTestClass {
 	 * 
 	 */
 
-	@Ignore
+	@Test
 	@Transactional
 	public void testGetProductSearch() throws Exception {
 
@@ -616,7 +620,7 @@ public class ControllerTestClass {
 	 * 
 	 **/
 
-	@Ignore
+	@Test
 	@Transactional
 	public void testGetProduct() throws Exception {
 
@@ -655,7 +659,7 @@ public class ControllerTestClass {
 	 * @throws Exception
 	 */
 
-	@Ignore
+	@Test
 	@Transactional
 	public void testGetProductsCategory() throws Exception {
 
@@ -712,7 +716,7 @@ public class ControllerTestClass {
 	 * @throws Exception
 	 **/
 
-	@Ignore
+	@Test
 	@Transactional
 	public void testGetProductOfDepartments() throws Exception {
 
@@ -765,7 +769,7 @@ public class ControllerTestClass {
 	 * 
 	 **/
 
-	@Ignore
+	@Test
 	@Transactional
 	public void testGetProductDetails() throws Exception {
 
@@ -801,7 +805,7 @@ public class ControllerTestClass {
 	 * 
 	 **/
 
-	@Ignore
+	@Test
 	@Transactional
 	public void testGetProductLocations() throws Exception {
 
@@ -839,7 +843,7 @@ public class ControllerTestClass {
 	 * 
 	 **/
 
-	@Ignore
+	@Test
 	@Transactional
 	public void testGetProductReviews() throws Exception {
 
@@ -881,7 +885,7 @@ public class ControllerTestClass {
 	 * @throws MethodArgumentNotValidException
 	 */
 
-	@Ignore
+	@Test
 	@Transactional
 	public void testPostReview() throws JsonProcessingException, Exception {
 		ObjectMapper mapper = new ObjectMapper();
@@ -901,9 +905,6 @@ public class ControllerTestClass {
 
 	}
 
-	
-	
-
 	/**
 	 * Test register a customer unit/integrated testing
 	 * 
@@ -920,11 +921,10 @@ public class ControllerTestClass {
 	public void testRegisterCustomer() throws Exception {
 
 		// Given
-		
+
 		this.getEmail();
 		this.getPassword();
-		
-		
+
 		CustomerForm cust = new CustomerForm();
 		cust.setEmail(this.emailAddress);
 		cust.setName("ThankGod Ukachukwu");
@@ -946,9 +946,7 @@ public class ControllerTestClass {
 		this.mockMvc.perform(
 				post("/api/customers").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(cust)))
 				.andDo(print()).andExpect(status().isOk());// .andExpect(content().json(mapper.writeValueAsString(customer)));
-		
-		
-		
+
 	}
 
 	/**
@@ -966,14 +964,12 @@ public class ControllerTestClass {
 	@Transactional
 	public void testUpdateCustomer() throws JsonProcessingException, Exception {
 		ObjectMapper mapper = new ObjectMapper();
-		
 
 		RestAssured.port = 8080;
 		token = given().contentType(ContentType.JSON)
 				.body(AuthenticationRequest.builder().username("testingme2@yahoo.com").password("passme").build())
 				.when().post("/api/customers/login").andReturn().jsonPath().getString("token");
 		log.debug("Got token:" + token);
-		
 
 		CustomerUpdateForm cust = new CustomerUpdateForm();
 
@@ -1002,24 +998,18 @@ public class ControllerTestClass {
 	 * @throws Exception
 	 */
 
-	
-	
 	@Test
 	public void getCustomer() throws Exception {
-	        //@formatter:off
-	         given()
+		// @formatter:off
+		given()
 
-	            .accept(ContentType.JSON)
+				.accept(ContentType.JSON)
 
-	        .when()
-	            .get("http://localhost:" + port +"/api/customer")
+				.when().get("http://localhost:" + port + "/api/customer")
 
-	        .then()
-	            .assertThat()
-	            .statusCode(200);
-	         //@formatter:on
-	    }
-	
+				.then().assertThat().statusCode(200);
+		// @formatter:on
+	}
 
 	/**
 	 * Test add to cart unit/integrated testing
@@ -1027,12 +1017,13 @@ public class ControllerTestClass {
 	 * @throws Exception
 	 * 
 	 * 
-	 * @see {@link com.turing.ecommerce.controllers.CustomerController#registerCustomer(CustomerForm}.
+	 * @see {@link com.turing.ecommerce.controllers.CustomerController#addToShoppingCart(ShoppingCartForm}.
 	 * 
 	 * @throws Exception
 	 */
 
 	private String carttId = null;
+
 	@Test
 	@Transactional
 	public void testAddToCart() throws Exception {
@@ -1040,29 +1031,22 @@ public class ControllerTestClass {
 		// Generate different email for testing
 		this.carttId = Uid.generateRandomId(7, "abcdefghjkmnpqrstuvwxyz23456789", Character.LOWERCASE_LETTER);
 		// Given
-		
+
 		this.getEmail();
 		this.getPassword();
-		
-		
+
 		ShoppingCartForm cartItem = new ShoppingCartForm();
 		cartItem.setCartId(this.carttId);
 		cartItem.setAttributes("LG, red");
 		cartItem.setProductId(2);
-		
 
-		
-		
-		
 		ShoppingCartProduct scp = new ShoppingCartProduct();
 		scp.setAttributes("LG, red");
 		scp.setProductId(2);
-		
 
 		CartService mock = org.mockito.Mockito.mock(CartService.class);
-		
-		List<ShoppingCartProduct>  list = Arrays.asList(scp);
-		
+
+		List<ShoppingCartProduct> list = Arrays.asList(scp);
 
 		given(mock.getShoppingCartProducts(cartItem)).willReturn(list);
 
@@ -1070,15 +1054,45 @@ public class ControllerTestClass {
 
 		ObjectMapper mapper = new ObjectMapper();
 
-		this.mockMvc.perform(
-				post("/api/shoppingcart/add").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(cartItem)))
-				.andDo(print()).andExpect(status().isOk());// .andExpect(content().json(mapper.writeValueAsString(customer)));
-		
-		
-		
-		
-	
+		this.mockMvc.perform(post("/api/shoppingcart/add").contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsString(cartItem))).andDo(print()).andExpect(status().isOk());// .andExpect(content().json(mapper.writeValueAsString(customer)));
+
 	}
 
+	/**
+	 * Test add to cart unit/integrated testing
+	 * 
+	 * @throws Exception
+	 * 
+	 * 
+	 * @see {@link com.turing.ecommerce.controllers.CustomerController#addToShoppingCart(ShoppingCartForm}.
+	 * 
+	 * @throws Exception
+	 */
+
+	@Test
+	@Transactional
+	public void testStripeCharge() throws Exception {
+
+		ChargeRequest charge = new ChargeRequest();
+
+		charge.setAmount(5);
+		charge.setCurrency(Currency.USD);
+		charge.setDescription("testing payment endpoint");
+		charge.setOrderId(1);
+		charge.setStripeToken("sk_test_vvpKl3yIpBVeoRJ3qxS6mjIF00jfi6Bi6j");
+
+		StripeService mock = org.mockito.Mockito.mock(StripeService.class);
+
+		given(mock.charge(charge)).willReturn(new Charge());
+
+		// when + then
+
+		ObjectMapper mapper = new ObjectMapper();
+
+		this.mockMvc.perform(post("/api/stripe/charge").contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsString(charge))).andDo(print()).andExpect(status().isOk());// .andExpect(content().json(mapper.writeValueAsString(customer)));
+
+	}
 
 }

@@ -26,6 +26,7 @@ import javax.validation.Valid;
 import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,7 +38,8 @@ public class ChargeController {
 	@Resource(name = "stripeServiceImpl")
     StripeService paymentsService;
 
-    @PostMapping("/api/stripe/charge")
+	@CrossOrigin
+	@PostMapping("/api/stripe/charge")
     public String charge(@Valid @RequestBody ChargeRequest chargeRequest, Model model) throws StripeException {
         chargeRequest.setDescription("Customer charge");
         chargeRequest.setCurrency(Currency.USD);
@@ -48,7 +50,7 @@ public class ChargeController {
         model.addAttribute("balance_transaction", charge.getBalanceTransaction());
         return "result";
     }
-    
+	@CrossOrigin
     @PostMapping("/api/stripe/webhooks")
     public ResponseEntity webhooks(Model model) throws StripeException {
     	Stripe.apiKey = "sk_test_lomdOfxbm7QDgZWvR82UhV6D";

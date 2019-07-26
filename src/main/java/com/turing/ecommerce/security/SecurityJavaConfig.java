@@ -19,6 +19,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import com.turing.ecommerce.security.jwt.JwtAuthenticationEntryPoint;
 import com.turing.ecommerce.security.jwt.JwtConfigurer;
@@ -34,8 +35,7 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
 
 	private SimpleUrlAuthenticationFailureHandler myFailureHandler = new SimpleUrlAuthenticationFailureHandler();
 	
-	@Autowired
-	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+	
 
 	@Autowired
 	JwtTokenProvider jwtTokenProvider;
@@ -52,8 +52,7 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http //.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
-		//.and()
+		http 
 		     .httpBasic().disable()
 		     .csrf().disable()
 		     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -80,6 +79,9 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
 		       
 
 	}
+	
+	
+
 
 	@Bean
 	public PasswordEncoder encoder() {
