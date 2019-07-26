@@ -21,11 +21,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -36,7 +38,7 @@ public class ChargeController {
     StripeService paymentsService;
 
     @PostMapping("/api/stripe/charge")
-    public String charge(ChargeRequest chargeRequest, Model model) throws StripeException {
+    public String charge(@Valid @RequestBody ChargeRequest chargeRequest, Model model) throws StripeException {
         chargeRequest.setDescription("Customer charge");
         chargeRequest.setCurrency(Currency.USD);
         Charge charge = paymentsService.charge(chargeRequest);
