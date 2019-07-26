@@ -62,7 +62,7 @@ public class CartController {
 	 * @return
 	 */
 	@GetMapping(path = "/api/shoppingcart/generateUniqueId")
-	public ResponseEntity<Map<String, String>> getAll() {
+	public ResponseEntity<Map<String, String>> getCartId() {
 
 		String str = Uid.generateRandomId(11, "abcdefghjkmnpqrstuvwxyz23456789", Character.LOWERCASE_LETTER);
 		Map<String, String> model = new HashMap<String, String>();
