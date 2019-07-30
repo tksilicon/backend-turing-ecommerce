@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.turing.ecommerce.DTO.ProductDetailsDTO;
-import com.turing.ecommerce.DTO.ProductLocationsDTO;
+import com.turing.ecommerce.DTO.ProductDetail;
+import com.turing.ecommerce.DTO.ProductLocations;
 import com.turing.ecommerce.DTO.ReviewDTO;
 import com.turing.ecommerce.exceptions.AuthenticatedUserException;
 import com.turing.ecommerce.exceptions.ProductsGetProductsException;
@@ -155,7 +155,7 @@ public class ProductController {
 	 * API to return product details
 	 */
 	@GetMapping(path = "/api/products/{product_id}/details")
-	public ResponseEntity<Optional<ProductDetailsDTO>> getDetailsProduct(
+	public ResponseEntity<Optional<ProductDetail>> getDetailsProduct(
 			@PathVariable(name = "product_id", required = true) Integer productId) {
 		return ResponseEntity.ok(productService.getProductDetails(productId));
 	}
@@ -164,7 +164,7 @@ public class ProductController {
 	 * API to return product locations
 	 */
 	@GetMapping(path = "/api/products/{product_id}/locations")
-	public ResponseEntity<Optional<ProductLocationsDTO>> getLocationsDetails(
+	public ResponseEntity<Optional<ProductLocations>> getLocationsDetails(
 			@PathVariable(name = "product_id", required = true) Integer productId) {
 		return ResponseEntity.ok(productService.getProductLocations(productId));
 	}

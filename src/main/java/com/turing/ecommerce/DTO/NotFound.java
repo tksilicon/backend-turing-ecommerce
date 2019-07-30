@@ -3,10 +3,8 @@
  */
 package com.turing.ecommerce.DTO;
 
-
-
-import java.math.BigDecimal;
-
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,14 +17,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductReviewDTO {
+@ApiModel
+public class NotFound {
 	
-	
-	private String review;
-	private short rating;
-	
-	
-	
-	
+	@ApiModelProperty
+	private String message;
 
 }

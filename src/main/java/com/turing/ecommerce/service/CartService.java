@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 import com.turing.ecommerce.DTO.ItemForm;
-import com.turing.ecommerce.DTO.ProductDetailsDTO;
+import com.turing.ecommerce.DTO.ProductDetail;
 import com.turing.ecommerce.DTO.SavedItem;
 import com.turing.ecommerce.DTO.ShoppingCartForm;
-import com.turing.ecommerce.DTO.ShoppingCartProduct;
+import com.turing.ecommerce.DTO.CartWithProduct;
 import com.turing.ecommerce.model.ShoppingCart;
 
 /**
@@ -21,16 +21,16 @@ import com.turing.ecommerce.model.ShoppingCart;
 public interface CartService {
 	
 	public ShoppingCart save(ShoppingCart cart);
-	public List<ShoppingCartProduct> getShoppingCartProducts(ShoppingCartForm cart);
-	public List<ShoppingCartProduct> getShoppingCartProducts2(String cartId);
-	public List<ShoppingCartProduct> getSavedItemInCart(int itemId, ItemForm quant);
-	public List<ShoppingCartProduct> delete(String cartId);
+	public List<CartWithProduct> getShoppingCartProducts(ShoppingCartForm cart);
+	public List<CartWithProduct> getShoppingCartProducts2(String cartId);
+	public List<CartWithProduct> getSavedItemInCart(int itemId, ItemForm quant);
+	public List<CartWithProduct> delete(String cartId);
 	public void moveItemToCart(Integer itemId);
 	public BigDecimal returnTotalAmountCart(String cardId);
 	public void saveForLater(Integer itemId);
 	public List<SavedItem> getSaved(String cartId);
 	public void updateCart(Integer itemId, String cartId);
-	public Optional<ProductDetailsDTO>  getProduct(Integer productId);
+	public Optional<ProductDetail>  getProduct(Integer productId);
 	
 	
 	

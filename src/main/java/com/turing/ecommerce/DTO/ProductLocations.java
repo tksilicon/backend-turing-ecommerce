@@ -9,18 +9,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class AttributesProductDTO {
+public class ProductLocations {
 	
-
-	private String name;
-	
-	private int attributeValueId;
-
-	private String value;
+	private Integer categoryId;
+	private String categoryName;
+	private Integer departmentId;
+	private String departmentName;
 	
 	
-
 	
 
 }

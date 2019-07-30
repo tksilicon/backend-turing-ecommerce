@@ -1,9 +1,9 @@
 package com.turing.ecommerce.service;
 
-import com.turing.ecommerce.DTO.CategoryProductDTO;
+import com.turing.ecommerce.DTO.CategoryBasic;
 
 
 public interface ProdCatDAOService {
 
-	CategoryProductDTO findByProductId(int id);
+	CategoryBasic findByProductId(int id);
 }

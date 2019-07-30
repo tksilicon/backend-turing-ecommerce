@@ -17,10 +17,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.turing.ecommerce.DTO.ItemForm;
-import com.turing.ecommerce.DTO.ProductDetailsDTO;
+import com.turing.ecommerce.DTO.ProductDetail;
 import com.turing.ecommerce.DTO.SavedItem;
 import com.turing.ecommerce.DTO.ShoppingCartForm;
-import com.turing.ecommerce.DTO.ShoppingCartProduct;
+import com.turing.ecommerce.DTO.CartWithProduct;
 import com.turing.ecommerce.exceptions.CartNotFoundException;
 import com.turing.ecommerce.exceptions.ProductNotFoundException;
 import com.turing.ecommerce.model.Order;
@@ -68,7 +68,7 @@ public class CartServiceImpl implements CartService {
 	 */
 	@Transactional
 	@Override
-	public List<ShoppingCartProduct> getShoppingCartProducts(ShoppingCartForm cart) {
+	public List<CartWithProduct> getShoppingCartProducts(ShoppingCartForm cart) {
 		
 		ShoppingCart cartItem = new ShoppingCart();
 		cartItem.setCartId(cart.getCartId());
@@ -82,7 +82,7 @@ public class CartServiceImpl implements CartService {
 		
 		
 
-		List<ShoppingCartProduct> shoppingCartToReturn = new LinkedList<ShoppingCartProduct>();
+		List<CartWithProduct> shoppingCartToReturn = new LinkedList<CartWithProduct>();
 
 		ShoppingCart sp = cartRepository.save(cartItem);
 
@@ -94,9 +94,9 @@ public class CartServiceImpl implements CartService {
 		while (cartIt.hasNext()) {
 			ShoppingCart sc = cartIt.next();
 
-			ShoppingCartProduct scp = new ShoppingCartProduct();
+			CartWithProduct scp = new CartWithProduct();
 
-			Optional<ProductDetailsDTO> pdo = productRepository.getProductDetails(sc.getProductId());
+			Optional<ProductDetail> pdo = productRepository.getProductDetails(sc.getProductId());
 
 			scp.setItemId(sc.getItemId());
 			scp.setName(pdo.get().getName());
@@ -104,7 +104,7 @@ public class CartServiceImpl implements CartService {
 			scp.setProductId(sc.getProductId());
 			scp.setUnitCost(pdo.get().getPrice());
 			scp.setQuantity(1);
-			scp.setImage(pdo.get().getImage1());
+			scp.setImage(pdo.get().getImage2());
 
 			BigDecimal total = scp.getUnitCost().multiply(new BigDecimal(scp.getQuantity()));
 			scp.setSubtotal(total);
@@ -125,7 +125,7 @@ public class CartServiceImpl implements CartService {
 	 */
 	@Transactional
 	@Override
-	public List<ShoppingCartProduct> getShoppingCartProducts2(String cartId) {
+	public List<CartWithProduct> getShoppingCartProducts2(String cartId) {
 		List<ShoppingCart> cartNow = null;
 
 		try {
@@ -138,15 +138,15 @@ public class CartServiceImpl implements CartService {
 		}
 		
 
-		List<ShoppingCartProduct> shoppingCartToReturn = new LinkedList<ShoppingCartProduct>();
+		List<CartWithProduct> shoppingCartToReturn = new LinkedList<CartWithProduct>();
 		Iterator<ShoppingCart> cartIt = cartNow.iterator();
 
 		while (cartIt.hasNext()) {
 			ShoppingCart sc = cartIt.next();
 
-			ShoppingCartProduct scp = new ShoppingCartProduct();
+			CartWithProduct scp = new CartWithProduct();
 
-			Optional<ProductDetailsDTO> pdo = productRepository.getProductDetails(sc.getProductId());
+			Optional<ProductDetail> pdo = productRepository.getProductDetails(sc.getProductId());
 
 			scp.setItemId(sc.getItemId());
 			scp.setName(pdo.get().getName());
@@ -154,7 +154,7 @@ public class CartServiceImpl implements CartService {
 			scp.setProductId(sc.getProductId());
 			scp.setUnitCost(pdo.get().getPrice());
 			scp.setQuantity(1);
-			scp.setImage(pdo.get().getImage1());
+			scp.setImage(pdo.get().getImage2());
 
 			BigDecimal total = scp.getUnitCost().multiply(new BigDecimal(scp.getQuantity()));
 			scp.setSubtotal(total);
@@ -199,7 +199,7 @@ public class CartServiceImpl implements CartService {
 		while (cartIt.hasNext()) {
 			ShoppingCart sc = cartIt.next();
 
-			Optional<ProductDetailsDTO> pdo = productRepository.getProductDetails(sc.getProductId());
+			Optional<ProductDetail> pdo = productRepository.getProductDetails(sc.getProductId());
 
 			BigDecimal bd = pdo.get().getPrice();
 			Integer quant = sc.getQuantity();
@@ -244,7 +244,7 @@ public class CartServiceImpl implements CartService {
 	 */
 	@Transactional
 	@Override
-	public List<ShoppingCartProduct> getSavedItemInCart(int itemId, ItemForm quant) {
+	public List<CartWithProduct> getSavedItemInCart(int itemId, ItemForm quant) {
 
 		ShoppingCart scc = cartRepository.findByItemId(itemId);
 
@@ -254,15 +254,15 @@ public class CartServiceImpl implements CartService {
 
 		List<ShoppingCart> cartNow = cartRepository.findByCartId(scc.getCartId());
 
-		List<ShoppingCartProduct> shoppingCartToReturn = new LinkedList<ShoppingCartProduct>();
+		List<CartWithProduct> shoppingCartToReturn = new LinkedList<CartWithProduct>();
 		Iterator<ShoppingCart> cartIt = cartNow.iterator();
 
 		while (cartIt.hasNext()) {
 			ShoppingCart sc = cartIt.next();
 
-			ShoppingCartProduct scp = new ShoppingCartProduct();
+			CartWithProduct scp = new CartWithProduct();
 
-			Optional<ProductDetailsDTO> pdo = productRepository.getProductDetails(sc.getProductId());
+			Optional<ProductDetail> pdo = productRepository.getProductDetails(sc.getProductId());
 
 			scp.setItemId(sc.getItemId());
 			scp.setName(pdo.get().getName());
@@ -270,7 +270,7 @@ public class CartServiceImpl implements CartService {
 			scp.setProductId(sc.getProductId());
 			scp.setUnitCost(pdo.get().getPrice());
 			scp.setQuantity(sc.getQuantity());
-			scp.setImage(pdo.get().getImage1());
+			scp.setImage(pdo.get().getImage2());
 
 			BigDecimal total = scp.getUnitCost().multiply(new BigDecimal(scp.getQuantity()));
 			scp.setSubtotal(total);
@@ -293,7 +293,7 @@ public class CartServiceImpl implements CartService {
 
 	@Transactional
 	@Override
-	public List<ShoppingCartProduct> delete(String cartId) {
+	public List<CartWithProduct> delete(String cartId) {
 
 		List<ShoppingCart> cartNow = cartRepository.findByCartId(cartId);
 
@@ -306,7 +306,7 @@ public class CartServiceImpl implements CartService {
 
 		}
 
-		List<ShoppingCartProduct> shoppingCartToReturn = new LinkedList<ShoppingCartProduct>();
+		List<CartWithProduct> shoppingCartToReturn = new LinkedList<CartWithProduct>();
 
 		return shoppingCartToReturn;
 	}
@@ -328,7 +328,7 @@ public class CartServiceImpl implements CartService {
 	 * @see com.turing.ecommerce.service.CartService#getProduct(java.lang.Integer)
 	 */
 	@Override
-	public Optional<ProductDetailsDTO> getProduct(Integer productId) {
+	public Optional<ProductDetail> getProduct(Integer productId) {
 		// TODO Auto-generated method stub
 		return productRepository.getProductDetails(productId);
 	}

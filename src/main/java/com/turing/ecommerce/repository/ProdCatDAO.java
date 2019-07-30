@@ -1,9 +1,9 @@
 package com.turing.ecommerce.repository;
 
-import com.turing.ecommerce.DTO.CategoryProductDTO;
+import com.turing.ecommerce.DTO.CategoryBasic;
 
 
 public interface ProdCatDAO {
 
-	CategoryProductDTO findByProductId(int id);
+	CategoryBasic findByProductId(int id);
 }

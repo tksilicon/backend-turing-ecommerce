@@ -155,14 +155,7 @@ public class CustomerController {
 		}
 	}
 
-	/**@GetMapping("/api/customer")
-	public ResponseEntity<Optional<Customer>> getCustomerById(HttpServletRequest request) throws Exception {
-
-		String token = request.getParameter("USER-KEY");
-		
-		return ResponseEntity.ok(customerService.findByEmail(jwtTokenProvider.getAuthentication(token).getName()));
-
-	}**/
+	
 	
 	@SuppressWarnings("rawtypes")
 	@GetMapping("/api/customer")
@@ -232,7 +225,7 @@ public class CustomerController {
 	            .headers(headers)
 	            .body(mapResponse);
 
-		//return ResponseEntity.ok(mapResponse);
+		
 
 	}
 

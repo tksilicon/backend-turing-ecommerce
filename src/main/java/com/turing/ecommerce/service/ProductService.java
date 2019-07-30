@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.turing.ecommerce.DTO.ProductDetailsDTO;
-import com.turing.ecommerce.DTO.ProductLocationsDTO;
+import com.turing.ecommerce.DTO.ProductDetail;
+import com.turing.ecommerce.DTO.ProductLocations;
 import com.turing.ecommerce.DTO.ReviewDTO;
 import com.turing.ecommerce.model.Product;
 import com.turing.ecommerce.model.Review;
@@ -35,8 +35,8 @@ public interface ProductService {
 	Map<String, Object> productDepartmentSearch(Integer department_id, Integer page, Integer limit, Integer description_length);
 
 
-	Optional<ProductDetailsDTO> getProductDetails(Integer productId);
-    Optional<ProductLocationsDTO> getProductLocations(Integer productId);
+	Optional<ProductDetail> getProductDetails(Integer productId);
+    Optional<ProductLocations> getProductLocations(Integer productId);
 	
     List<ReviewDTO> getProductReviews(Integer productId);
 	

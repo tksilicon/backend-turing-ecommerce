@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import com.turing.ecommerce.DTO.CategoryProductDTO;
+import com.turing.ecommerce.DTO.CategoryBasic;
 
 @RestResource(exported = false)
 @Repository
@@ -25,8 +25,8 @@ public class ProdCategoryRepository implements ProdCatDAO{
 	
 	
 
-	public CategoryProductDTO findByProductId(int id) {
-		return (CategoryProductDTO) jdbcTemplate.queryForObject(FETCH_SQL_BY_ID, new Object[] { id },
+	public CategoryBasic findByProductId(int id) {
+		return (CategoryBasic) jdbcTemplate.queryForObject(FETCH_SQL_BY_ID, new Object[] { id },
 				new CategoryProductDTOMapper());
 	}
 
@@ -35,8 +35,8 @@ public class ProdCategoryRepository implements ProdCatDAO{
 class CategoryProductDTOMapper implements RowMapper {
 
 	@Override
-	public CategoryProductDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
-		CategoryProductDTO user = new CategoryProductDTO();
+	public CategoryBasic mapRow(ResultSet rs, int rowNum) throws SQLException {
+		CategoryBasic user = new CategoryBasic();
 		user.setCategoryId(rs.getInt("category_id"));
 		user.setName(rs.getString("name"));
 		user.setDepartmentId(rs.getInt("department_id"));

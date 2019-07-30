@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.turing.ecommerce.DTO.CategoryAllDTO;
 import com.turing.ecommerce.DTO.CategoryDTO;
-import com.turing.ecommerce.DTO.CategoryProductDTO;
+import com.turing.ecommerce.DTO.CategoryBasic;
 import com.turing.ecommerce.model.Category;
 import com.turing.ecommerce.model.ProductCategory;
 
@@ -70,7 +70,7 @@ public class CategoryController {
 	 * API to return categories of department
 	 */
 	@GetMapping(path = "/api/categories/inProduct/{product_id}")
-	public ResponseEntity<CategoryProductDTO> getCategoryByProductId(
+	public ResponseEntity<CategoryBasic> getCategoryByProductId(
 			@PathVariable(name = "product_id", required = true) Integer productId) {
 
 		return ResponseEntity.ok(categoryService2.findByProductId(productId));

@@ -11,17 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-
-import com.turing.ecommerce.security.jwt.JwtAuthenticationEntryPoint;
 import com.turing.ecommerce.security.jwt.JwtConfigurer;
 import com.turing.ecommerce.security.jwt.JwtTokenProvider;
 
@@ -29,11 +24,6 @@ import com.turing.ecommerce.security.jwt.JwtTokenProvider;
 @EnableWebSecurity
 public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	private MySavedRequestAwareAuthenticationSuccessHandler mySavedRequestAwareAuthenticationSuccessHandler;
-
-	private SimpleUrlAuthenticationFailureHandler myFailureHandler = new SimpleUrlAuthenticationFailureHandler();
-	
 	
 
 	@Autowired
@@ -67,13 +57,8 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
 				    .antMatchers("/api/orders/shortDetail/{order_id}").authenticated()
 				    .antMatchers("/api/stripe/charge").authenticated()
 				    
-				
-				.and()
-
-				.formLogin().successHandler(mySavedRequestAwareAuthenticationSuccessHandler)
-				.failureHandler(myFailureHandler)
-				.and().logout()
-				.and()
+	            .and()
+	           
 				.apply(new JwtConfigurer(jwtTokenProvider));;
 		       
 

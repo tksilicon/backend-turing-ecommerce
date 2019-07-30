@@ -12,9 +12,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
-import com.turing.ecommerce.DTO.ProductCategoryDTO;
-import com.turing.ecommerce.DTO.ProductDetailsDTO;
-import com.turing.ecommerce.DTO.ProductLocationsDTO;
+import com.turing.ecommerce.DTO.ProductInDepartment;
+import com.turing.ecommerce.DTO.ProductDetail;
+import com.turing.ecommerce.DTO.ProductLocations;
 import com.turing.ecommerce.DTO.ReviewDTO;
 import com.turing.ecommerce.model.Product;
 import com.turing.ecommerce.model.Review;
@@ -96,7 +96,7 @@ public class ProductServiceImpl implements ProductService {
 		
 		Pageable pageable = PageRequest.of(page - 1, limit);
 		
-		List<ProductCategoryDTO> products	= productRepository.productSearchCategory(category_id, description_length, pageable);
+		List<ProductInDepartment> products	= productRepository.productSearchCategory(category_id, description_length, pageable);
 	
 
 		Map<String, Object> mapOfReturn = new HashMap<String, Object>();
@@ -112,7 +112,7 @@ public class ProductServiceImpl implements ProductService {
 		
 		Pageable pageable = PageRequest.of(page - 1, limit);
 		
-		List<ProductCategoryDTO> products	= productRepository.productSearchDepartment(department_id, description_length, pageable);
+		List<ProductInDepartment> products	= productRepository.productSearchDepartment(department_id, description_length, pageable);
 	
 
 		Map<String, Object> mapOfReturn = new HashMap<String, Object>();
@@ -123,7 +123,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Optional<ProductDetailsDTO> getProductDetails(Integer productId) {
+	public Optional<ProductDetail> getProductDetails(Integer productId) {
 		
 		
 		return productRepository.getProductDetails(productId);
@@ -131,7 +131,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Optional<ProductLocationsDTO> getProductLocations(Integer productId) {
+	public Optional<ProductLocations> getProductLocations(Integer productId) {
 		
 		return productRepository.getProductLocations(productId);
 	}

@@ -10,19 +10,19 @@ import com.turing.ecommerce.DTO.AttributesProductDTO;
 import com.turing.ecommerce.DTO.AuthenticationRequest;
 import com.turing.ecommerce.DTO.CategoryAllDTO;
 import com.turing.ecommerce.DTO.CategoryDTO;
-import com.turing.ecommerce.DTO.CategoryProductDTO;
+import com.turing.ecommerce.DTO.CategoryBasic;
 import com.turing.ecommerce.DTO.ChargeRequest;
 import com.turing.ecommerce.DTO.ChargeRequest.Currency;
 import com.turing.ecommerce.DTO.CustomerForm;
 import com.turing.ecommerce.DTO.CustomerUpdateForm;
 import com.turing.ecommerce.DTO.DepartmentDTO;
-import com.turing.ecommerce.DTO.ProductCategoryDTO;
-import com.turing.ecommerce.DTO.ProductDetailsDTO;
-import com.turing.ecommerce.DTO.ProductLocationsDTO;
+import com.turing.ecommerce.DTO.ProductInDepartment;
+import com.turing.ecommerce.DTO.ProductDetail;
+import com.turing.ecommerce.DTO.ProductLocations;
 import com.turing.ecommerce.DTO.ProductReviewDTO;
 import com.turing.ecommerce.DTO.ReviewDTO;
 import com.turing.ecommerce.DTO.ShoppingCartForm;
-import com.turing.ecommerce.DTO.ShoppingCartProduct;
+import com.turing.ecommerce.DTO.CartWithProduct;
 import com.turing.ecommerce.model.Customer;
 import com.turing.ecommerce.model.Product;
 import com.turing.ecommerce.model.ShoppingCart;
@@ -267,7 +267,7 @@ public class ControllerTestClass {
 
 		// given
 
-		CategoryDTO category = new CategoryDTO(4, 2,
+		CategoryDTO category = new CategoryDTO(4, 2, "Flower",
 				"Our ever-growing selection of beautiful animal T-shirts represents critters from everywhere, "
 						+ "both wild and domestic. If you don't see the T-shirt with the animal you're looking for, tell us and we'll find it!");
 
@@ -306,7 +306,7 @@ public class ControllerTestClass {
 	public void testGetCategoryByProductId() throws Exception {
 
 		// given
-		CategoryProductDTO cattt = new CategoryProductDTO();
+		CategoryBasic cattt = new CategoryBasic();
 		cattt.setCategoryId(1);
 		cattt.setDepartmentId(1);
 		cattt.setName("French");
@@ -664,12 +664,12 @@ public class ControllerTestClass {
 	public void testGetProductsCategory() throws Exception {
 
 		// given
-		ProductCategoryDTO product = new ProductCategoryDTO();
+		ProductInDepartment product = new ProductInDepartment();
 		product.setProductId(1);
 		product.setName("Arc d\'Triomphe");
 		product.setDescription("This beautiful and iconic T-shirt will no doubt lead you to your own triumph.");
 
-		List<ProductCategoryDTO> products = Arrays.asList(product);
+		List<ProductInDepartment> products = Arrays.asList(product);
 
 		Map<String, Object> mapOfReturn = new HashMap<String, Object>();
 
@@ -721,12 +721,12 @@ public class ControllerTestClass {
 	public void testGetProductOfDepartments() throws Exception {
 
 		// given
-		ProductCategoryDTO product = new ProductCategoryDTO();
+		ProductInDepartment product = new ProductInDepartment();
 		product.setProductId(1);
 		product.setName("Arc d\'Triomphe");
 		product.setDescription("This beautiful and iconic T-shirt will no doubt lead you to your own triumph.");
 
-		List<ProductCategoryDTO> products = Arrays.asList(product);
+		List<ProductInDepartment> products = Arrays.asList(product);
 
 		Map<String, Object> mapOfReturn = new HashMap<String, Object>();
 
@@ -774,12 +774,12 @@ public class ControllerTestClass {
 	public void testGetProductDetails() throws Exception {
 
 		// given
-		ProductDetailsDTO product = new ProductDetailsDTO();
+		ProductDetail product = new ProductDetail();
 		product.setProductId(1);
 		product.setName("Arc d\'Triomphe");
 		product.setDescription("This beautiful and iconic T-shirt will no doubt lead you to your own triumph.");
 
-		Optional<ProductDetailsDTO> optionalProduct = Optional.of(product);
+		Optional<ProductDetail> optionalProduct = Optional.of(product);
 
 		ProductService mock = org.mockito.Mockito.mock(ProductService.class);
 
@@ -810,13 +810,13 @@ public class ControllerTestClass {
 	public void testGetProductLocations() throws Exception {
 
 		// given
-		ProductLocationsDTO product = new ProductLocationsDTO();
+		ProductLocations product = new ProductLocations();
 		product.setCategoryId(1);
 		product.setCategoryName("French");
 		product.setDepartmentId(1);
 		product.setDepartmentName("Regional");
 
-		Optional<ProductLocationsDTO> optionalProduct = Optional.of(product);
+		Optional<ProductLocations> optionalProduct = Optional.of(product);
 
 		ProductService mock = org.mockito.Mockito.mock(ProductService.class);
 
@@ -1040,13 +1040,13 @@ public class ControllerTestClass {
 		cartItem.setAttributes("LG, red");
 		cartItem.setProductId(2);
 
-		ShoppingCartProduct scp = new ShoppingCartProduct();
+		CartWithProduct scp = new CartWithProduct();
 		scp.setAttributes("LG, red");
 		scp.setProductId(2);
 
 		CartService mock = org.mockito.Mockito.mock(CartService.class);
 
-		List<ShoppingCartProduct> list = Arrays.asList(scp);
+		List<CartWithProduct> list = Arrays.asList(scp);
 
 		given(mock.getShoppingCartProducts(cartItem)).willReturn(list);
 

@@ -5,7 +5,7 @@ import java.util.Set;
 
 import javax.persistence.*;
 
-import com.turing.ecommerce.DTO.CategoryProductDTO;
+import com.turing.ecommerce.DTO.CategoryBasic;
 
 
 /**

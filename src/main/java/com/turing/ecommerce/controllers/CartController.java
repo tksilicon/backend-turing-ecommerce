@@ -31,10 +31,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.turing.ecommerce.DTO.CustomerForm;
 import com.turing.ecommerce.DTO.CustomerUpdateForm;
 import com.turing.ecommerce.DTO.ItemForm;
-import com.turing.ecommerce.DTO.ProductDetailsDTO;
+import com.turing.ecommerce.DTO.ProductDetail;
 import com.turing.ecommerce.DTO.SavedItem;
 import com.turing.ecommerce.DTO.ShoppingCartForm;
-import com.turing.ecommerce.DTO.ShoppingCartProduct;
+import com.turing.ecommerce.DTO.CartWithProduct;
 import com.turing.ecommerce.exceptions.CartNotFoundException;
 import com.turing.ecommerce.exceptions.CustomerExistException;
 import com.turing.ecommerce.exceptions.CustomerNotFoundException;
@@ -74,10 +74,10 @@ public class CartController {
 	 * API endpoint to add to shopping cart
 	 */
 	@PostMapping(path = "/api/shoppingcart/add")
-	public ResponseEntity<List<ShoppingCartProduct>> addToShoppingCart(@Valid @RequestBody ShoppingCartForm cart)
+	public ResponseEntity<List<CartWithProduct>> addToShoppingCart(@Valid @RequestBody ShoppingCartForm cart)
 			throws CustomerExistException {
 
-		ProductDetailsDTO pdo = cartService.getProduct(cart.getProductId())
+		ProductDetail pdo = cartService.getProduct(cart.getProductId())
 				.orElseThrow(() -> new ProductNotFoundException("Product Not found"));
 
 		ShoppingCart scp = new ShoppingCart();
@@ -89,7 +89,7 @@ public class CartController {
 
 		scp.setAddedOn(date);
 
-		List<ShoppingCartProduct> ourCart = cartService.getShoppingCartProducts(cart);
+		List<CartWithProduct> ourCart = cartService.getShoppingCartProducts(cart);
 
 		return ResponseEntity.ok(ourCart);
 
@@ -101,7 +101,7 @@ public class CartController {
 	 * @return
 	 */
 	@GetMapping(path = "/api//shoppingcart/{cart_id}")
-	public ResponseEntity<List<ShoppingCartProduct>> getShoppingCart(
+	public ResponseEntity<List<CartWithProduct>> getShoppingCart(
 			@PathVariable(name = "cart_id", required = true) String cartId) {
 
 		try {
@@ -117,7 +117,7 @@ public class CartController {
 	 * API endpoint to update Item in cart
 	 */
 	@PutMapping(path = "/api/shoppingcart/update/{item_id}")
-	public ResponseEntity<List<ShoppingCartProduct>> updateItemInCart(
+	public ResponseEntity<List<CartWithProduct>> updateItemInCart(
 			@PathVariable(name = "item_id", required = true) Integer itemId, @Valid @RequestBody ItemForm quant) {
 		try {
 			return ResponseEntity.ok(cartService.getSavedItemInCart(itemId, quant));
@@ -131,10 +131,10 @@ public class CartController {
 	 * API endpoint to delete Items in cart
 	 */
 	@DeleteMapping(path = "/api/shoppingcart/empty/{cart_id}")
-	public ResponseEntity<List<ShoppingCartProduct>> emptyCart(
+	public ResponseEntity<List<CartWithProduct>> emptyCart(
 			@PathVariable(name = "cart_id", required = true) String cartId) {
 
-		List<ShoppingCartProduct> returnCart = null;
+		List<CartWithProduct> returnCart = null;
 
 		try {
 			returnCart = cartService.delete(cartId);
@@ -217,7 +217,7 @@ public class CartController {
 	 * API endpoint to remove Items in cart
 	 */
 	@PutMapping(path = "/api/shoppingcart/removeProduct/{item_id}")
-	public ResponseEntity<List<ShoppingCartProduct>> removeProduct(
+	public ResponseEntity<List<CartWithProduct>> removeProduct(
 			@PathVariable(name = "item_id", required = true) Integer itemId) {
 
 		try {

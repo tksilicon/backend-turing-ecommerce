@@ -2,6 +2,8 @@ package com.turing.ecommerce.DTO;
 
 import java.math.BigDecimal;
 
+import javax.persistence.SqlResultSetMapping;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,18 +11,23 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+public class CategoryBasic {
 
-public class AttributesProductDTO {
-	
+	private int categoryId;
+
+	private int departmentId;
 
 	private String name;
 	
-	private int attributeValueId;
+	
 
-	private String value;
+	
+
+	
 	
 	
 
 	
 
 }
+
