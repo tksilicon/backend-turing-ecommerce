@@ -13,6 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.turing.ecommerce.model.*;
 import com.turing.ecommerce.service.*;
 import com.turing.ecommerce.DTO.*;
+import com.turing.ecommerce.exceptions.error;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 
 
@@ -24,7 +30,7 @@ import com.turing.ecommerce.DTO.*;
  * 
  */
 
-
+@Api(value = "Everything about Attributes", position= 1)
 @RestController
 public class AttributeController {
 	
@@ -39,6 +45,10 @@ public class AttributeController {
 	/*
 	 * API to return all attributes
 	 */
+	@ApiOperation(value = "Get attributes list", response = Attribute.class)
+	@ApiResponses(value = {
+            @ApiResponse(code = 200, message = "List of Attribute Objects", response = AttributeDTO.class ),
+            @ApiResponse(code = 400, message = "Return a error object", response = error.class) })
 	@GetMapping(path = "/api/attributes")
 	public ResponseEntity<List<AttributeDTO>> getAll() {
 		return ResponseEntity.ok(attributesService.getAll());
@@ -48,6 +58,7 @@ public class AttributeController {
 	 * API to return an attribute by id
 	 */
 	@GetMapping(path = "/api/attributes/{attribute_id}")
+	
 	public ResponseEntity<Optional<AttributeDTO>> getById(
 			@PathVariable(name = "attribute_id", required = true) Integer attributeId) {
 		
