@@ -27,7 +27,6 @@ import com.turing.ecommerce.security.jwt.JwtTokenProvider;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired

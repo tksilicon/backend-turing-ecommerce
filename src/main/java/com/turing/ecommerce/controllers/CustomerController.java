@@ -53,7 +53,7 @@ import com.turing.ecommerce.service.CustomerService;
 
 /**
  * 
- * Customer Controller for all Rest APIs endpoints related to Products.
+ * Customer Controller for all Rest APIs endpoints related to Customers.
  * 
  * @author thankgodukachukwu
  *
@@ -108,7 +108,11 @@ public class CustomerController {
 
 
 	}
-	
+	/**
+	 *   API endpoint to login customer
+	 * @param data
+	 * @return
+	 */
 
 
 	@PostMapping("/api/customers/login")
