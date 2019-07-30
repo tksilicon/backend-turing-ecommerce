@@ -122,19 +122,19 @@ public class SwaggerConfig {
 				.forCodeGeneration(true)
 				
 
-				.ignoredParameterTypes(Pageable.class)
-				.ignoredParameterTypes(Optional.class)
-				.ignoredParameterTypes(ResponseEntity.class)
+				//.ignoredParameterTypes(Pageable.class)
+				//.ignoredParameterTypes(Optional.class)
+				//.ignoredParameterTypes(ResponseEntity.class)
 				
-				.ignoredParameterTypes( SavedItem.class, AttributeDTO.class, AttributesProductDTO.class,
-						AuthenticationRequest.class, CategoryAllDTO.class, CategoryDTO.class, CategoryAllDTO.class,
-						 ChargeRequest.class, CustomerAddressForm.class,
-						CustomerCreditCardForm.class, CustomerForm.class, CustomerOrderDTO.class,
-						CustomerUpdateForm.class, DepartmentDTO.class, ItemForm.class, OrderDTO.class, OrderForm.class,
+				//.ignoredParameterTypes( SavedItem.class, AttributeDTO.class, AttributesProductDTO.class,
+						//AuthenticationRequest.class, CategoryAllDTO.class, CategoryDTO.class, CategoryAllDTO.class,
+						 //ChargeRequest.class, CustomerAddressForm.class,
+						//CustomerCreditCardForm.class, CustomerForm.class, CustomerOrderDTO.class,
+						//CustomerUpdateForm.class, DepartmentDTO.class, ItemForm.class, OrderDTO.class, OrderForm.class,
 						
-						ProductReviewDTO.class, ShippingRegionDTO.class, ShoppingCartForm.class, ShoppingCartProd.class)
-				.ignoredParameterTypes(java.sql.Date.class)
-				.directModelSubstitute(ReviewDTO.class, Review.class)
+						//ProductReviewDTO.class, ShippingRegionDTO.class, ShoppingCartForm.class, ShoppingCartProd.class)
+				//.ignoredParameterTypes(java.sql.Date.class)
+				//.directModelSubstitute(ReviewDTO.class, Review.class)
 				.directModelSubstitute(java.time.LocalDate.class, java.sql.Date.class)
 				.directModelSubstitute(java.time.ZonedDateTime.class, Date.class)
 				.directModelSubstitute(java.time.LocalDateTime.class, Date.class).select()

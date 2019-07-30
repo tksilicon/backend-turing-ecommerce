@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel
 public class ReviewDTO {
 	
 	private String name;
