@@ -149,7 +149,7 @@ public class SwaggerConfig {
 				
 
 				.securityContexts(securityContext()).securitySchemes(Lists.newArrayList(apiKey()))
-				.useDefaultResponseMessages(true);
+				.useDefaultResponseMessages(false);
 
 		docket = docket.select().paths(regex(DEFAULT_INCLUDE_PATTERN)).build();
 

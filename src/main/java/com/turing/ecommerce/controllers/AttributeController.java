@@ -30,7 +30,7 @@ import io.swagger.annotations.ApiResponses;
  * 
  */
 
-@Api(value = "Everything about Attributes", position= 1)
+@Api(value = "Everything about Attributes")
 @RestController
 public class AttributeController {
 	
