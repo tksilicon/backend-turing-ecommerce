@@ -76,7 +76,7 @@ public class CartController {
 	 * API endpoint to add to shopping cart
 	 */
 	@PostMapping(path = "/api/shoppingcart/add")
-	public ResponseEntity<List<CartWithProduct>> addToShoppingCart(@ApiParam(hidden = true)@Valid @RequestBody ShoppingCartForm cart)
+	public ResponseEntity<List<CartWithProduct>> addToShoppingCart(@Valid @RequestBody ShoppingCartForm cart)
 			throws CustomerExistException {
 
 		ProductDetail pdo = cartService.getProduct(cart.getProductId())
@@ -120,7 +120,7 @@ public class CartController {
 	 */
 	@PutMapping(path = "/api/shoppingcart/update/{item_id}")
 	public ResponseEntity<List<CartWithProduct>> updateItemInCart(
-			@PathVariable(name = "item_id", required = true) Integer itemId, @ApiParam(hidden = true)@Valid @RequestBody ItemForm quant) {
+			@PathVariable(name = "item_id", required = true) Integer itemId, @Valid @RequestBody ItemForm quant) {
 		try {
 			return ResponseEntity.ok(cartService.getSavedItemInCart(itemId, quant));
 		} catch (EntityNotFoundException ex) {
