@@ -6,6 +6,7 @@ package com.turing.ecommerce.swagger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
@@ -41,6 +42,7 @@ import com.turing.ecommerce.DTO.ShoppingCartProd;
 import com.turing.ecommerce.DTO.CartWithProduct;
 import com.turing.ecommerce.DTO.Unauthorized;
 import com.turing.ecommerce.exceptions.error;
+import com.turing.ecommerce.model.Review;
 
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
@@ -50,6 +52,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import static springfox.documentation.builders.PathSelectors.regex;
 
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.schema.AlternateTypeRules;
+import springfox.documentation.schema.WildcardType;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.AuthorizationScope;
@@ -122,7 +126,7 @@ public class SwaggerConfig {
 				.ignoredParameterTypes(Optional.class)
 				.ignoredParameterTypes(ResponseEntity.class)
 				
-				.ignoredParameterTypes(ReviewDTO.class, SavedItem.class, AttributeDTO.class, AttributesProductDTO.class,
+				.ignoredParameterTypes( SavedItem.class, AttributeDTO.class, AttributesProductDTO.class,
 						AuthenticationRequest.class, CategoryAllDTO.class, CategoryDTO.class, CategoryAllDTO.class,
 						 ChargeRequest.class, CustomerAddressForm.class,
 						CustomerCreditCardForm.class, CustomerForm.class, CustomerOrderDTO.class,
@@ -130,7 +134,7 @@ public class SwaggerConfig {
 						
 						ProductReviewDTO.class, ShippingRegionDTO.class, ShoppingCartForm.class, ShoppingCartProd.class)
 				.ignoredParameterTypes(java.sql.Date.class)
-				
+				.directModelSubstitute(ReviewDTO.class, Review.class)
 				.directModelSubstitute(java.time.LocalDate.class, java.sql.Date.class)
 				.directModelSubstitute(java.time.ZonedDateTime.class, Date.class)
 				.directModelSubstitute(java.time.LocalDateTime.class, Date.class).select()
@@ -142,6 +146,8 @@ public class SwaggerConfig {
 				.additionalModels(typeResolver.resolve(NotFound.class)) 
 				.additionalModels(typeResolver.resolve(error.class)) 
 				.additionalModels(typeResolver.resolve(CustomerRegister.class)) 
+				
+
 				.securityContexts(securityContext()).securitySchemes(Lists.newArrayList(apiKey()))
 				.useDefaultResponseMessages(true);
 
