@@ -114,7 +114,7 @@ public class SwaggerConfig {
 		Docket docket = new Docket(DocumentationType.SWAGGER_2)
 				.protocols(protocols)
 				.apiInfo(apiInfo)
-				.apiInfo(ApiInfo.DEFAULT)
+				
 				.forCodeGeneration(true)
 				
 
