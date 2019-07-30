@@ -10,6 +10,7 @@ package com.turing.ecommerce.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -47,7 +48,7 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
 		     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
 				    .authorizeRequests()
-				    .antMatchers("/api/products/{product_id}/reviews").authenticated()
+				    .antMatchers(HttpMethod.POST,"/api/products/{product_id}/reviews").authenticated()
 				    .antMatchers("/api/customer").authenticated()
 				    .antMatchers("/api/customers/address").authenticated()
 				    .antMatchers("/api/customers/creditCard").authenticated()
