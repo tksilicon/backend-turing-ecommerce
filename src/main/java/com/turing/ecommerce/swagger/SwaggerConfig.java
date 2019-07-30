@@ -143,7 +143,7 @@ public class SwaggerConfig {
 				.additionalModels(typeResolver.resolve(error.class)) 
 				.additionalModels(typeResolver.resolve(CustomerRegister.class)) 
 				.securityContexts(securityContext()).securitySchemes(Lists.newArrayList(apiKey()))
-				.useDefaultResponseMessages(false);
+				.useDefaultResponseMessages(true);
 
 		docket = docket.select().paths(regex(DEFAULT_INCLUDE_PATTERN)).build();
 
