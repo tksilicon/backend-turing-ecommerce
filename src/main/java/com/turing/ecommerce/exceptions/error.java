@@ -22,16 +22,17 @@ import lombok.Data;
 public class error  {
 
 	@ApiModelProperty(example="USR_02,")
-	private String status;
-	
-	@ApiModelProperty(example="The field example is empty.,")
 	private String code;
 
-	@ApiModelProperty(example="example,")
+
+	@ApiModelProperty(example="The field example is empty.,")
 	private String message;
 
-	@ApiModelProperty(example="500")
+	@ApiModelProperty(example="example,")
 	private String field;
+	
+	@ApiModelProperty(example="500")
+	private String status;
 	
 	
     
