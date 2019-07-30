@@ -17,6 +17,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import io.swagger.annotations.ApiModelProperty;
+
 
 
 /**
@@ -82,6 +84,7 @@ public class Customer implements UserDetails, Serializable {
 	@Column(name="shipping_region_id")
 	private int shippingRegionId;
 	
+	@ApiModelProperty(required = false, hidden = true)
 	@Transient
 	private List<String> roles = Arrays.asList("USER");
 	
@@ -212,39 +215,39 @@ public class Customer implements UserDetails, Serializable {
 	
 	//userdetails methods
 	
-	
+	@ApiModelProperty(required = false, hidden = true)
 	 @Override
 	 public Collection<? extends GrantedAuthority> getAuthorities() {
 	        return this.roles.stream().map(SimpleGrantedAuthority::new).collect(toList());
 	    }
-
+	@ApiModelProperty(required = false, hidden = true)
 	@Override
 	public String getUsername() {
 		
 		return this.getEmail();
 	}
-
+	@ApiModelProperty(required = false, hidden = true)
 	@Override
 	public boolean isAccountNonExpired() {
 		
 		return true;
 	}
-
+	@ApiModelProperty(required = false, hidden = true)
 	@Override
 	public boolean isAccountNonLocked() {
 		return true;
 	}
-
+	@ApiModelProperty(required = false, hidden = true)
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return true;
 	}
-
+	@ApiModelProperty(required = false, hidden = true)
 	@Override
 	public boolean isEnabled() {
 		return true;
 	}
-
+	@ApiModelProperty(required = false, hidden = true)
 	public List<String> getRoles() {
 		return roles;
 	}

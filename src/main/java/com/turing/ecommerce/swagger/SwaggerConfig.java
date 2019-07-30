@@ -128,8 +128,7 @@ public class SwaggerConfig {
 						CustomerCreditCardForm.class, CustomerForm.class, CustomerOrderDTO.class,
 						CustomerUpdateForm.class, DepartmentDTO.class, ItemForm.class, OrderDTO.class, OrderForm.class,
 						
-						ProductReviewDTO.class, ShippingRegionDTO.class, ShoppingCartForm.class, ShoppingCartProd.class,
-						 GrantedAuthority.class)
+						ProductReviewDTO.class, ShippingRegionDTO.class, ShoppingCartForm.class, ShoppingCartProd.class)
 				.ignoredParameterTypes(java.sql.Date.class)
 				
 				.directModelSubstitute(java.time.LocalDate.class, java.sql.Date.class)
