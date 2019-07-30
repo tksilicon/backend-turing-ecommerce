@@ -59,8 +59,8 @@ public class AttributeController {
 	 */
 	@ApiOperation(value = "Get Attribute by id", response = Attribute.class)
 	@ApiResponses(value = {
-            @ApiResponse(code = 200, message = "List of Attribute Objects", response = AttributeDTO.class ),
-            @ApiResponse(code = 400, message = "Return a Object of Attribute", response = error.class) })
+            @ApiResponse(code = 200, message = "Attribute Object", response = AttributeDTO.class ),
+            @ApiResponse(code = 400, message = "Return a error object", response = error.class) })
 	@GetMapping(path = "/api/attributes/{attribute_id}")
 	public ResponseEntity<Optional<AttributeDTO>> getById(
 			@PathVariable(name = "attribute_id", required = true) Integer attributeId) {
