@@ -22,16 +22,16 @@ import lombok.Data;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
 public class error  {
 
-	@ApiModelProperty
+	@ApiModelProperty(value="USR_02,")
 	private String status;
 	
-	@ApiModelProperty
+	@ApiModelProperty(value="The field example is empty.,")
 	private String code;
 
-	@ApiModelProperty
+	@ApiModelProperty(value="example,")
 	private String message;
 
-	@ApiModelProperty
+	@ApiModelProperty(value="500")
 	private String field;
 	
 	
