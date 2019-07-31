@@ -60,7 +60,7 @@ public class AttributeController {
 	 */
 	@ApiOperation(value = "Get Attribute by id", response = Attribute.class)
 	@ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Attribute Object", response = AttributeDTO.class ),
+            @ApiResponse(code = 200, message = "Return Attribute Object", response = AttributeDTO.class ),
             @ApiResponse(code = 400, message = "Return a error object", response = error.class) })
 	@GetMapping(path = "/api/attributes/{attribute_id}")
 	public ResponseEntity<Optional<AttributeDTO>> getById(
@@ -82,6 +82,11 @@ public class AttributeController {
 	/*
 	 * API to return values of attribute_id 
 	 */
+	
+	@ApiOperation(value = "Get Values Attribute from Atribute", response = Attribute.class)
+	@ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Return a list of Attribute Values", response = AttributeValueDTO.class ),
+            @ApiResponse(code = 400, message = "Return a error object", response = error.class) })
 	@GetMapping(path = "/api/attributes/values/{attribute_id}")
 	public ResponseEntity<List<AttributeDTO>> getValuesByAttributeId(
 			@PathVariable(name = "attribute_id", required = true) Integer attributeId) {
@@ -89,6 +94,8 @@ public class AttributeController {
 		return ResponseEntity.ok(attributesService.getValuesByAttributeId(attributeId));
 
 	}
+	
+	
 	
 	/*
 	 * API to return attributes value array of product Id
