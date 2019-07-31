@@ -22,10 +22,9 @@ import com.turing.ecommerce.security.jwt.JwtConfigurer;
 import com.turing.ecommerce.security.jwt.JwtTokenProvider;
 
 @Configuration
+
 @EnableWebSecurity
 public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
-
-	
 
 	@Autowired
 	JwtTokenProvider jwtTokenProvider;
@@ -34,44 +33,28 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
-		
-		
-	}
 
-	
+	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http 
-		     .httpBasic().disable()
-		     .csrf().disable()
-		     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		http.httpBasic().disable().sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
+				.antMatchers(HttpMethod.POST, "/api/products/{product_id}/reviews").authenticated()
+				.antMatchers("/api/customer").authenticated().antMatchers("/api/customers/address").authenticated()
+				.antMatchers("/api/customers/creditCard").authenticated().antMatchers("/api//orders").authenticated()
+				.antMatchers("/api/orders/{order_id}").authenticated().antMatchers("/api/orders/inCustomer")
+				.authenticated().antMatchers("/api/orders/shortDetail/{order_id}").authenticated()
+				//.antMatchers("/api/stripe/charge").authenticated()
+
 				.and()
-				    .authorizeRequests()
-				    .antMatchers(HttpMethod.POST,"/api/products/{product_id}/reviews").authenticated()
-				    .antMatchers("/api/customer").authenticated()
-				    .antMatchers("/api/customers/address").authenticated()
-				    .antMatchers("/api/customers/creditCard").authenticated()
-				    .antMatchers("/api//orders").authenticated()
-				    .antMatchers("/api/orders/{order_id}").authenticated()
-				    .antMatchers("/api/orders/inCustomer").authenticated()
-				    .antMatchers("/api/orders/shortDetail/{order_id}").authenticated()
-				    .antMatchers("/api/stripe/charge").authenticated()
-				    
-	            .and()
-	           
-				.apply(new JwtConfigurer(jwtTokenProvider));;
-		       
+
+				.apply(new JwtConfigurer(jwtTokenProvider));
 
 	}
-	
-	
-
 
 	@Bean
 	public PasswordEncoder encoder() {
 		return new BCryptPasswordEncoder();
 	}
 }
-
-

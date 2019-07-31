@@ -3,15 +3,16 @@ package com.turing.ecommerce.model;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+
 import static java.util.stream.Collectors.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Positive;
-
 import org.hibernate.validator.constraints.CreditCardNumber;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,33 +20,26 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import io.swagger.annotations.ApiModelProperty;
 
-
-
 /**
  * The persistent class for the customer database table.
  * 
  */
 @Entity
-@NamedQuery(name="Customer.findAll", query="SELECT c FROM Customer c")
+@NamedQuery(name = "Customer.findAll", query = "SELECT c FROM Customer c")
 public class Customer implements UserDetails, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@TableGenerator(name="TABLE_GEN",table="T_GENERATOR",
-	pkColumnName="GEN_KEY",
-	valueColumnName="GEN_VALUE",
-	pkColumnValue="CUST_ID",
-	initialValue=1,allocationSize=1)
-	 
-	@GeneratedValue(strategy=GenerationType.TABLE, generator="TABLE_GEN")
-	@Column(name="customer_id")
+	@TableGenerator(name = "TABLE_GEN", table = "T_GENERATOR", pkColumnName = "GEN_KEY", valueColumnName = "GEN_VALUE", pkColumnValue = "CUST_ID", initialValue = 1, allocationSize = 1)
+
+	@GeneratedValue(strategy = GenerationType.TABLE, generator = "TABLE_GEN")
+	@Column(name = "customer_id")
 	private int customerId;
-	
-	
-	@Column(name="address_1")
+
+	@Column(name = "address_1")
 	private String address1;
 
-	@Column(name="address_2")
+	@Column(name = "address_2")
 	private String address2;
 
 	private String city;
@@ -53,41 +47,42 @@ public class Customer implements UserDetails, Serializable {
 	private String country;
 
 	@Lob
-	@Column(name="credit_card")
+	@Column(name = "credit_card")
 	@CreditCardNumber
 	private String creditCard;
 
-	@Column(name="day_phone")
+	@Column(name = "day_phone")
 	private String dayPhone;
 
 	@Email
 	private String email;
 
-	@Column(name="eve_phone")
+	@Column(name = "eve_phone")
 	private String evePhone;
 
-	@Column(name="mob_phone")
+	@Column(name = "mob_phone")
 	private String mobPhone;
-	
 
-	@NotEmpty (message="Review cannot be emply")
-	@NotBlank(message="Review cannot be emply")
+	@NotEmpty(message = "Review cannot be emply")
+	@NotBlank(message = "Review cannot be emply")
 	private String name;
 
 	private String password;
 
-	@Column(name="postal_code")
+	@Column(name = "postal_code")
 	private String postalCode;
 
 	private String region;
 
-	@Column(name="shipping_region_id")
+	@Column(name = "shipping_region_id")
 	private int shippingRegionId;
-	
+
 	@ApiModelProperty(required = false, hidden = true)
 	@Transient
 	private List<String> roles = Arrays.asList("USER");
+
 	
+
 	public Customer() {
 	}
 
@@ -171,7 +166,6 @@ public class Customer implements UserDetails, Serializable {
 		this.mobPhone = mobPhone;
 	}
 
-
 	public String getName() {
 		return name;
 	}
@@ -212,41 +206,46 @@ public class Customer implements UserDetails, Serializable {
 		this.shippingRegionId = shippingRegionId;
 	}
 
-	
-	//userdetails methods
-	
+	// userdetails methods
+
 	@ApiModelProperty(required = false, hidden = true)
-	 @Override
-	 public Collection<? extends GrantedAuthority> getAuthorities() {
-	        return this.roles.stream().map(SimpleGrantedAuthority::new).collect(toList());
-	    }
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return this.roles.stream().map(SimpleGrantedAuthority::new).collect(toList());
+	}
+
 	@ApiModelProperty(required = false, hidden = true)
 	@Override
 	public String getUsername() {
-		
+
 		return this.getEmail();
 	}
+
 	@ApiModelProperty(required = false, hidden = true)
 	@Override
 	public boolean isAccountNonExpired() {
-		
+
 		return true;
 	}
+
 	@ApiModelProperty(required = false, hidden = true)
 	@Override
 	public boolean isAccountNonLocked() {
 		return true;
 	}
+
 	@ApiModelProperty(required = false, hidden = true)
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return true;
 	}
+
 	@ApiModelProperty(required = false, hidden = true)
 	@Override
 	public boolean isEnabled() {
 		return true;
 	}
+
 	@ApiModelProperty(required = false, hidden = true)
 	public List<String> getRoles() {
 		return roles;
@@ -254,7 +253,5 @@ public class Customer implements UserDetails, Serializable {
 
 	
 	
-	
-	
-	
+
 }
