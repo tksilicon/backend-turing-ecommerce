@@ -26,7 +26,9 @@ import com.turing.ecommerce.DTO.AttributeDTO;
 import com.turing.ecommerce.DTO.ProductDetail;
 import com.turing.ecommerce.DTO.ProductGetAllDTO;
 import com.turing.ecommerce.DTO.ProductLocations;
+import com.turing.ecommerce.DTO.ProductReviewDTO;
 import com.turing.ecommerce.DTO.ReviewDTO;
+import com.turing.ecommerce.DTO.Unauthorized;
 import com.turing.ecommerce.exceptions.AuthenticatedUserException;
 import com.turing.ecommerce.exceptions.ProductsGetProductsException;
 import com.turing.ecommerce.exceptions.error;
@@ -63,7 +65,7 @@ public class ProductController {
 	/*
 	 * API to return all products
 	 */
-	@ApiOperation(value = "Get All Products", response = Attribute.class)
+	@ApiOperation(value = "Get All Products", response = Map.class)
 	@ApiResponses(value = {
             @ApiResponse(code = 200, message = "Return the total of products and a list of Products in row.", response = ProductGetAllDTO.class ),
             @ApiResponse(code = 400, message = "Return a error object", response = error.class) })
@@ -112,6 +114,12 @@ public class ProductController {
 	/*
 	 * API to search all products
 	 */
+	@ApiOperation(value = "Search Products", response = Map.class)
+	@ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Return the total of products and a list of Products in row.", response = ProductGetAllDTO.class ),
+            @ApiResponse(code = 400, message = "Return a error object", response = error.class) })
+	
+
 	@GetMapping(path = "/api/products/search")
 	public ResponseEntity<Map<String, Object>> productSearchQueryAllWords(
 			@RequestParam(name = "query_string", required = true) String query_string,
@@ -132,6 +140,11 @@ public class ProductController {
 	/*
 	 * API to return a Category by id
 	 */
+	@ApiOperation(value = "Product by ID", response = Product.class)
+	@ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Return a Product Object.", response = Product.class ),
+            @ApiResponse(code = 400, message = "Return a error object", response = error.class) })
+	
 	@GetMapping(path = "/api/products/{product_id}")
 	public ResponseEntity<Optional<Product>> getById(
 			@PathVariable(name = "product_id", required = true) Integer productId) {
@@ -141,6 +154,11 @@ public class ProductController {
 	/*
 	 * API to search all products
 	 */
+	@ApiOperation(value = "Get a list of Products of Categories", response = Map.class)
+	@ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Return a list of Product Objects.", response = ProductGetAllDTO.class ),
+            @ApiResponse(code = 400, message = "Return a error object", response = error.class) })
+	
 	@GetMapping(path = "/api/products/inCategory/{category_id}")
 	public ResponseEntity<Map<String, Object>> productOfCategories(
 			@PathVariable(name = "category_id", required = true) Integer category_id,
@@ -155,6 +173,11 @@ public class ProductController {
 	/*
 	 * API to search all products by department
 	 */
+	@ApiOperation(value = "Get a list of Products on Departments", response = Map.class)
+	@ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Return the total and a list of products", response = ProductGetAllDTO.class ),
+            @ApiResponse(code = 400, message = "Return a error object", response = error.class) })
+	
 	@GetMapping(path = "/api/products/inDepartment/{department_id}")
 	public ResponseEntity<Map<String, Object>> productOfDepartment(
 			@PathVariable(name = "department_id", required = true) Integer department_id,
@@ -170,6 +193,11 @@ public class ProductController {
 	/*
 	 * API to return product details
 	 */
+	@ApiOperation(value = "Get details of a Product", response = ProductDetail.class)
+	@ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Return the total and a list of products", response = ProductDetail.class ),
+            @ApiResponse(code = 400, message = "Return a error object", response = error.class) })
+	
 	@GetMapping(path = "/api/products/{product_id}/details")
 	public ResponseEntity<Optional<ProductDetail>> getDetailsProduct(
 			@PathVariable(name = "product_id", required = true) Integer productId) {
@@ -179,6 +207,11 @@ public class ProductController {
 	/*
 	 * API to return product locations
 	 */
+	@ApiOperation(value = "Get locations of Product", response = ProductLocations.class)
+	@ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Return locations of products.", response = ProductLocations.class ),
+            @ApiResponse(code = 400, message = "Return a error object", response = error.class) })
+	
 	@GetMapping(path = "/api/products/{product_id}/locations")
 	public ResponseEntity<Optional<ProductLocations>> getLocationsDetails(
 			@PathVariable(name = "product_id", required = true) Integer productId) {
@@ -188,6 +221,12 @@ public class ProductController {
 	/*
 	 * API to return product reviews
 	 */
+	
+	@ApiOperation(value = "Get reviews of a Product", response = ReviewDTO.class)
+	@ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Return a list of reviews", response = ReviewDTO.class ),
+            @ApiResponse(code = 400, message = "Return a error object", response = error.class) })
+	
 	@GetMapping(path = "/api/products/{product_id}/reviews")
 	public ResponseEntity<List<ReviewDTO>> getProductReviews(
 			@PathVariable(name = "product_id", required = true) Integer productId) {
@@ -197,6 +236,12 @@ public class ProductController {
 	/*
 	 * API to return post reviews
 	 */
+	
+	@ApiResponses(value = {
+            @ApiResponse(code = 200, message = "No data" ),
+            @ApiResponse(code = 400, message = "Return a error object", response = error.class),
+            @ApiResponse(code = 401, message = "Unauthorized", response = Unauthorized.class)})
+
 	@PostMapping(path = "/api/products/{product_id}/reviews")
 	public ResponseEntity<Review> postProductReviews( @Valid @RequestBody Review review) throws AuthenticatedUserException {
 

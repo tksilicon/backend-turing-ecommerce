@@ -20,21 +20,21 @@ public class Product implements Serializable {
 
 	@Id
 	@Column(name = "product_id")
-	@ApiModelProperty(example="1")
+	@ApiModelProperty(example="1", position=1)
 	private int productId;
 	
-	@ApiModelProperty(example="Chartres Cathedral")
+	@ApiModelProperty(example="Chartres Cathedral", position=2)
 	private String name;
 
-	@ApiModelProperty(example="\"The Fur Merchants\". Not all the beautiful"
+	@ApiModelProperty(position=3, example="\"The Fur Merchants\". Not all the beautiful"
 			+ " stained glass in the great cathedrals depicts "
 			+ "saints and angels! Lay aside your furs for the summer and wear this beautiful T-shirt!\"")
 	private String description;
 	
-	@ApiModelProperty(example="16.95")
+	@ApiModelProperty(example="16.95", position=4)
 	private BigDecimal price;
 
-	@ApiModelProperty(example="15.95")
+	@ApiModelProperty(example="15.95", position=5)
 	@Column(name = "discounted_price")
 	private BigDecimal discountedPrice;
 	
@@ -42,18 +42,19 @@ public class Product implements Serializable {
 
 	
 
-	@ApiModelProperty(example="chartres-cathedral.gif")
+	@ApiModelProperty(example="chartres-cathedral.gif", position=6)
 	private String image;
 
-	@ApiModelProperty(example="chartres-cathedral2.gif")
+	@ApiModelProperty(example="chartres-cathedral2.gif", position=7)
 	@Column(name = "image_2")
 	private String image2;
 	
-	@ApiModelProperty(example="0")
-	private short display;
 	
-	@ApiModelProperty(example="chartres-cathedral-thumbnail.gif")
+	@ApiModelProperty(example="chartres-cathedral-thumbnail.gif", position=8)
 	private String thumbnail;
+	
+	@ApiModelProperty(example="0", position=9)
+	private short display;
 
 	
 
