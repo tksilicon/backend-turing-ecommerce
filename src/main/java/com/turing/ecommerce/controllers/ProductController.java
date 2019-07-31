@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.turing.ecommerce.DTO.AttributeDTO;
 import com.turing.ecommerce.DTO.ProductDetail;
+import com.turing.ecommerce.DTO.ProductGetAllDTO;
 import com.turing.ecommerce.DTO.ProductLocations;
 import com.turing.ecommerce.DTO.ReviewDTO;
 import com.turing.ecommerce.exceptions.AuthenticatedUserException;
@@ -64,7 +65,7 @@ public class ProductController {
 	 */
 	@ApiOperation(value = "Get All Products", response = Attribute.class)
 	@ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Return the total of products and a list of Products in row.", response = Map.class ),
+            @ApiResponse(code = 200, message = "Return the total of products and a list of Products in row.", response = ProductGetAllDTO.class ),
             @ApiResponse(code = 400, message = "Return a error object", response = error.class) })
 	
 	@GetMapping(path = "/api/products")

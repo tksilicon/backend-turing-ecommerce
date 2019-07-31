@@ -2,12 +2,17 @@ package com.turing.ecommerce.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.math.BigDecimal;
 
 /**
  * The persistent class for the product database table.
  * 
  */
+@ApiModel
 @Entity
 @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p")
 public class Product implements Serializable {
@@ -15,25 +20,46 @@ public class Product implements Serializable {
 
 	@Id
 	@Column(name = "product_id")
+	@ApiModelProperty(example="1")
 	private int productId;
-
-	private String description;
-
-	@Column(name = "discounted_price")
-	private BigDecimal discountedPrice;
-
-	private short display;
-
-	private String image;
-
-	@Column(name = "image_2")
-	private String image2;
-
+	
+	@ApiModelProperty(example="Chartres Cathedral")
 	private String name;
 
+	@ApiModelProperty(example="\"The Fur Merchants\". Not all the beautiful"
+			+ " stained glass in the great cathedrals depicts "
+			+ "saints and angels! Lay aside your furs for the summer and wear this beautiful T-shirt!\"")
+	private String description;
+	
+	@ApiModelProperty(example="16.95")
 	private BigDecimal price;
 
+	@ApiModelProperty(example="15.95")
+	@Column(name = "discounted_price")
+	private BigDecimal discountedPrice;
+	
+	
+
+	
+
+	@ApiModelProperty(example="chartres-cathedral.gif")
+	private String image;
+
+	@ApiModelProperty(example="chartres-cathedral2.gif")
+	@Column(name = "image_2")
+	private String image2;
+	
+	@ApiModelProperty(example="0")
+	private short display;
+	
+	@ApiModelProperty(example="chartres-cathedral-thumbnail.gif")
 	private String thumbnail;
+
+	
+
+	
+
+	
 	
 	
 	
