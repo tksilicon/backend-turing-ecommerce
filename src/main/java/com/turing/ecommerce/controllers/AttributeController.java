@@ -17,6 +17,7 @@ import com.turing.ecommerce.exceptions.error;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
@@ -63,7 +64,7 @@ public class AttributeController {
             @ApiResponse(code = 400, message = "Return a error object", response = error.class) })
 	@GetMapping(path = "/api/attributes/{attribute_id}")
 	public ResponseEntity<Optional<AttributeDTO>> getById(
-			@PathVariable(name = "attribute_id", required = true) Integer attributeId) {
+			@ApiParam(type = "integer")@PathVariable(name = "attribute_id", required = true) Integer attributeId) {
 		
 	
 		Optional<AttributeDTO> attribute = attributesService.findById(attributeId);
