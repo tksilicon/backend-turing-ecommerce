@@ -26,24 +26,24 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProductAll {
 
-	@ApiModelProperty(example="1")
+	@ApiModelProperty(example="1", position =1)
 	private int productId;
 	
-	@ApiModelProperty(example="Chartres Cathedral")
+	@ApiModelProperty(example="Chartres Cathedral", position =2)
 	private String name;
 
-	@ApiModelProperty(example="\"The Fur Merchants\". Not all the beautiful"
+	@ApiModelProperty(position =3, example="\"The Fur Merchants\". Not all the beautiful"
 			+ " stained glass in the great cathedrals depicts "
 			+ "saints and angels! Lay aside your furs for the summer and wear this beautiful T-shirt!\"")
 	private String description;
 	
-	@ApiModelProperty(example="16.95")
+	@ApiModelProperty(example="16.95",position =4)
 	private BigDecimal price;
 
-	@ApiModelProperty(example="15.95")
+	@ApiModelProperty(example="15.95", position =5)
 	@Column(name = "discounted_price")
 	private BigDecimal discountedPrice;
 	
-	@ApiModelProperty(example="chartres-cathedral-thumbnail.gif")
+	@ApiModelProperty(example="chartres-cathedral-thumbnail.gif", position =6)
 	private String thumbnail;
 }
