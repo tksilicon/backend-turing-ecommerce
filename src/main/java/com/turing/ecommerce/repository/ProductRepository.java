@@ -18,7 +18,7 @@ import com.turing.ecommerce.model.Product;
 public interface ProductRepository extends PagingAndSortingRepository<Product, Integer> {
 
 	@Query(value = "select p from Product p where p.description = SUBSTRING(p.description, 1,:description_length)")
-	List<Product> getAll(Integer description_length, Pageable pageable);
+	List<Product> getAll(@Param("description_length")Integer description_length, Pageable pageable);
 
 	@Query(value = "select p from Product p where p.description LIKE '%:query_string%' "
 			+ " OR p.description LIKE '%:all_words%' "

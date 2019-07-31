@@ -17,7 +17,6 @@ import com.turing.ecommerce.exceptions.error;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
@@ -100,6 +99,10 @@ public class AttributeController {
 	/*
 	 * API to return attributes value array of product Id
 	 */
+	@ApiOperation(value = "Get all Attributes with Product ID", response = Attribute.class)
+	@ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Return a array of Values of Attribute Objects", response = AttributesProductDTO.class ),
+            @ApiResponse(code = 400, message = "Return a error object", response = error.class) })
 	@GetMapping(path = "/api/attributes/inProduct/{product_id}")
 	public ResponseEntity<List<AttributesProductDTO>> getAttributeValuesByProductId(
 			@PathVariable(name = "product_id", required = true) Integer productId) {

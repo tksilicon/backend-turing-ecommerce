@@ -9,6 +9,7 @@ import java.util.Optional;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 
 import org.springframework.web.context.request.WebRequest;
 import org.slf4j.Logger;
@@ -21,15 +22,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.turing.ecommerce.DTO.AttributeDTO;
 import com.turing.ecommerce.DTO.ProductDetail;
 import com.turing.ecommerce.DTO.ProductLocations;
 import com.turing.ecommerce.DTO.ReviewDTO;
 import com.turing.ecommerce.exceptions.AuthenticatedUserException;
 import com.turing.ecommerce.exceptions.ProductsGetProductsException;
+import com.turing.ecommerce.exceptions.error;
+import com.turing.ecommerce.model.Attribute;
 import com.turing.ecommerce.model.Product;
 import com.turing.ecommerce.model.Review;
 import com.turing.ecommerce.service.ProductService;
 import com.turing.ecommerce.service.ReviewService;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 /**
  * Product Controller for all Rest APIs endpoints related to Products.
@@ -37,6 +46,7 @@ import com.turing.ecommerce.service.ReviewService;
  * @author thankGodukachukwu
  * 
  */
+@Api(value = "Everything About Products")
 @RestController
 public class ProductController {
 
@@ -52,10 +62,15 @@ public class ProductController {
 	/*
 	 * API to return all products
 	 */
+	@ApiOperation(value = "Get All Products", response = Attribute.class)
+	@ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Return the total of products and a list of Products in row.", response = Map.class ),
+            @ApiResponse(code = 400, message = "Return a error object", response = error.class) })
+	
 	@GetMapping(path = "/api/products")
 	public ResponseEntity<Map<String, Object>> getAll(HttpServletRequest request,
-			@RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
-			@RequestParam(name = "limit", required = false) Integer limit,
+			@RequestParam(name = "page", required = false, defaultValue = "1") @Min(1) Integer page,
+			@RequestParam(name = "limit", required = false, defaultValue ="20") Integer limit,
 			@RequestParam(name = "description_length", required = false, defaultValue = "200") Integer description_length)
 			throws ProductsGetProductsException {
 

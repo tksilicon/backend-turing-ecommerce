@@ -34,9 +34,6 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private ProductRepository productRepository;
 	
-	@Autowired
-	private ReviewRepository reviewRepository;
-
 	@Override
 	public Map<String, Object> getAll(Integer page, Integer limit, Integer description_length) {
 
