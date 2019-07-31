@@ -53,7 +53,6 @@ import com.turing.ecommerce.DTO.CustomerForm;
 import com.turing.ecommerce.DTO.CustomerUpdateForm;
 import com.turing.ecommerce.exceptions.CustomerExistException;
 import com.turing.ecommerce.exceptions.CustomerNotFoundException;
-import com.turing.ecommerce.facebook.LoginRequest;
 import com.turing.ecommerce.model.Customer;
 import com.turing.ecommerce.repository.CustomerRepository;
 import com.turing.ecommerce.security.jwt.JwtTokenProvider;
@@ -63,7 +62,6 @@ import io.swagger.annotations.ApiParam;
 
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.User;
-import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 import org.springframework.social.oauth2.AccessGrant;
 import org.springframework.social.oauth2.OAuth2Operations;
 import org.springframework.social.oauth2.OAuth2Parameters;

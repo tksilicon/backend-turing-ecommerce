@@ -1077,7 +1077,7 @@ public class ControllerTestClass {
 		ChargeRequest charge = new ChargeRequest();
 
 		charge.setAmount(5);
-		charge.setCurrency(Currency.USD);
+		charge.setCurrency("USD");
 		charge.setDescription("testing payment endpoint");
 		charge.setOrderId(1);
 		charge.setStripeToken("sk_test_vvpKl3yIpBVeoRJ3qxS6mjIF00jfi6Bi6j");

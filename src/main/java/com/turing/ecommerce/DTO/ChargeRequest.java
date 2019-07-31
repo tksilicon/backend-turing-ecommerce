@@ -29,7 +29,7 @@ public class ChargeRequest {
     @NotNull
     private int amount; 
     // cents
-    private Currency currency;
+    private String currency;
     
     
     @NotEmpty(message = "Review cannot be emply")
