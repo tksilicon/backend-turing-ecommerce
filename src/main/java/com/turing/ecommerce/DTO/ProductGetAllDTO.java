@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 public class ProductGetAllDTO {
 	@ApiModelProperty(example="20")
 	private String count;
-	@ApiModelProperty(dataType="List", name = "rows", example = "[ProductAll]")
+	@ApiModelProperty(dataType="com.turing.ecommerce.DTO.ProuctAll", name = "rows", example = "[ProductAll]")
 	private List<ProductAll> rows;
 
 }
