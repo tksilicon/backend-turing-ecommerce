@@ -64,7 +64,7 @@ public class AttributeController {
             @ApiResponse(code = 400, message = "Return a error object", response = error.class) })
 	@GetMapping(path = "/api/attributes/{attribute_id}")
 	public ResponseEntity<Optional<AttributeDTO>> getById(
-			@ApiParam(type = "integer")@PathVariable(name = "attribute_id", required = true) Integer attributeId) {
+			@PathVariable(name = "attribute_id", required = true) Integer attributeId) {
 		
 	
 		Optional<AttributeDTO> attribute = attributesService.findById(attributeId);
