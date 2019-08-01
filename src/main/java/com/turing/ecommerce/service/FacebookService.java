@@ -30,7 +30,7 @@ public class FacebookService {
     
     public String createFacebookAccessToken(String code) {
         FacebookConnectionFactory connectionFactory = new FacebookConnectionFactory(facebookAppId, facebookSecret);
-        AccessGrant accessGrant = connectionFactory.getOAuthOperations().exchangeForAccess(code, "https://backend-turing-ecommerce.herokuapp.com/facebook/", null);
+        AccessGrant accessGrant = connectionFactory.getOAuthOperations().exchangeForAccess(code, "https://backend-turing-ecommerce.herokuapp.com/api/customers/facebook/", null);
         accessToken = accessGrant.getAccessToken();
     
         
