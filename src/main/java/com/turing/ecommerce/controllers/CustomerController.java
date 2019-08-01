@@ -58,6 +58,8 @@ import com.turing.ecommerce.repository.CustomerRepository;
 import com.turing.ecommerce.security.jwt.JwtTokenProvider;
 import com.turing.ecommerce.service.CustomCustomerDetailsService;
 import com.turing.ecommerce.service.CustomerService;
+import com.turing.ecommerce.service.FacebookService;
+
 import io.swagger.annotations.ApiParam;
 
 import org.springframework.social.facebook.api.Facebook;
@@ -189,40 +191,17 @@ public class CustomerController {
 	}
 	
 
-	@Value("${spring.social.facebook.appId}")
-    private String facebookAppId;
-    @Value("${spring.social.facebook.appSecret}")
-    private String facebookSecret;
-    
-    
-    /*
-     * If an authorization was given by provider(code) we get an token and bind the api.
-     */
-    @GetMapping("/api/facebook/callback/")
-    public String authorize(@RequestParam(value="code") String authorizationCode,Model model) {
-        // exchange facebook code with an access token.   
-    	FacebookConnectionFactory connectionFactory = new FacebookConnectionFactory(facebookAppId, facebookSecret);
-        AccessGrant accessGrant = connectionFactory.getOAuthOperations().exchangeForAccess(authorizationCode,
-        		"http://localhost:8080/api/facebook/callback/", null); // note that the application was deployed at "http://localhost:8080/testApp"
-        // connect to facebook with the given token.
-        Connection<Facebook> connection = connectionFactory.createConnection(accessGrant);
-        // bind the api
-        Facebook facebook = connection.getApi();
-        
-        // get user profile informations
-        User userProfile = facebook.userOperations().getUserProfile();
+	@Resource(name = "facebookServiceImpl")
+    FacebookService facebookService;
 
-        // At this point you have access to the facebook api.
-        // For ex you can get data about the user profile like this
-
-        // create user with facebook's user accounts details.
-       
-
-        return "redirect:/api/";
+    @GetMapping("/api/createFacebookAuthorization")
+    public String createFacebookAuthorization(){
+        return facebookService.createFacebookAuthorizationURL();
     }
-  
-
-   
+    @GetMapping("/facebook")
+    public void createFacebookAccessToken(@RequestParam("code") String code){
+        facebookService.createFacebookAccessToken(code);
+    }
 	
 
 	@SuppressWarnings("rawtypes")
@@ -238,6 +217,11 @@ public class CustomerController {
 		return ok(model);
 	}
 
+	@GetMapping("/api/customers/getName")
+	public String getNameResponse(){
+	    return facebookService.getName();
+	}
+	
 	/*
 	 * API endpoint to register customers
 	 */

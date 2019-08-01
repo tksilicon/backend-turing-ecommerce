@@ -93,7 +93,7 @@ public class SwaggerConfig {
 	public static final String ORDERS_ID = "/api/orders/\\{order_id\\}";
 	public static final String INCUSTOMER = "/api/orders/inCustomer";
 	public static final String SHORTDETAIL = "/api/orders/shortDetail/\\{order_id\\}";
-	public static final String CHARGE = "/api/stripe/charge";
+	
 
 	@Bean
 	public Docket apiDocket() {
@@ -182,8 +182,6 @@ public class SwaggerConfig {
 				SecurityContext.builder().securityReferences(defaultAuth()).forPaths(PathSelectors.regex(INCUSTOMER))
 						.build(),
 				SecurityContext.builder().securityReferences(defaultAuth()).forPaths(PathSelectors.regex(SHORTDETAIL))
-						.build(),
-				SecurityContext.builder().securityReferences(defaultAuth()).forPaths(PathSelectors.regex(CHARGE))
 						.build());
 
 	}

@@ -38,7 +38,7 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.httpBasic().disable().sessionManagement()
+		http.httpBasic().disable().csrf().disable().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
 				.antMatchers(HttpMethod.POST, "/api/products/{product_id}/reviews").authenticated()
 				.antMatchers("/api/customer").authenticated().antMatchers("/api/customers/address").authenticated()

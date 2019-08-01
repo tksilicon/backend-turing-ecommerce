@@ -200,7 +200,7 @@ public class TurningAppExceptionHandler extends ResponseEntityExceptionHandler {
 			StripeException ex) {
 		
 		
-		ApiErrorResponse errorResponse = new ApiErrorResponse("USR_24", ex.getMessage(),
+		ApiErrorResponse errorResponse = new ApiErrorResponse("USR_10", ex.getCause().getMessage(),
 				"Stripe", String.valueOf(HttpStatus.BAD_REQUEST));
 
 
