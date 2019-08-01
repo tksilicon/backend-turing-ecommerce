@@ -11,11 +11,11 @@ import org.springframework.web.context.annotation.RequestScope;
 
 import com.turing.ecommerce.facebook.Facebook;
 
-@Configuration
+//@Configuration
 public class SocialConfig {
 
-	@Bean
-	@RequestScope
+	//@Bean
+	//@RequestScope
 	public Facebook facebook(OAuth2AuthorizedClientService clientService) {
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

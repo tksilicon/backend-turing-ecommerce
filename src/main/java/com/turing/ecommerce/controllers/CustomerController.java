@@ -194,7 +194,7 @@ public class CustomerController {
 	}
 	
 	
-	private Facebook facebook;
+	/**private Facebook facebook;
 	
 	@Autowired
 	public CustomerController(Facebook facebook) {
@@ -204,7 +204,7 @@ public class CustomerController {
 	
 	
 	
-	/**@GetMapping("/api/customers/facebook")
+	@GetMapping("/api/customers/facebook")
 	public String home(Model model) {
 		
 		model.addAttribute("profile", facebook.getProfile());
