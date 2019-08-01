@@ -6,7 +6,6 @@ package com.turing.ecommerce.controllers;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.ResponseEntity.ok;
 
-import java.security.Principal;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -14,13 +13,10 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -33,10 +29,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.social.facebook.connect.FacebookConnectionFactory;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -53,22 +47,15 @@ import com.turing.ecommerce.DTO.CustomerForm;
 import com.turing.ecommerce.DTO.CustomerUpdateForm;
 import com.turing.ecommerce.exceptions.CustomerExistException;
 import com.turing.ecommerce.exceptions.CustomerNotFoundException;
+import com.turing.ecommerce.facebook.Facebook;
+import com.turing.ecommerce.facebook.Profile;
 import com.turing.ecommerce.model.Customer;
 import com.turing.ecommerce.repository.CustomerRepository;
 import com.turing.ecommerce.security.jwt.JwtTokenProvider;
 import com.turing.ecommerce.service.CustomCustomerDetailsService;
 import com.turing.ecommerce.service.CustomerService;
-import com.turing.ecommerce.service.FacebookService;
 
-import io.swagger.annotations.ApiParam;
 
-import org.springframework.social.facebook.api.Facebook;
-import org.springframework.social.facebook.api.User;
-import org.springframework.social.oauth2.AccessGrant;
-import org.springframework.social.oauth2.OAuth2Operations;
-import org.springframework.social.oauth2.OAuth2Parameters;
-import org.springframework.ui.Model;
-import org.springframework.social.connect.Connection;
 
 
 /**
@@ -193,18 +180,6 @@ public class CustomerController {
 	}
 	
 
-	@Autowired
-    FacebookService facebookService;
-
-    
-    @PostMapping("/api/customers/facebook")
-    public ResponseEntity createFacebookAccessToken(@RequestParam("access_token") String access_token){
-       String accessToken = facebookService.createFacebookAccessToken(access_token);
-       
-       return ResponseEntity.ok().body(accessToken);
-    }
-	
-
 	@SuppressWarnings("rawtypes")
 	@GetMapping("/api/customer")
 	public ResponseEntity currentUser(@AuthenticationPrincipal UserDetails userDetails) {
@@ -217,6 +192,30 @@ public class CustomerController {
 				.collect(toList()));
 		return ok(model);
 	}
+	
+	
+	private Facebook facebook;
+	
+	@Autowired
+	public CustomerController(Facebook facebook) {
+		this.facebook = facebook;
+	}
+	
+	
+	
+	
+	/**@GetMapping("/api/customers/facebook")
+	public String home(Model model) {
+		
+		model.addAttribute("profile", facebook.getProfile());
+		model.addAttribute("feed", facebook.getFeed());
+		
+	
+		
+		return "home";
+		
+	
+	}**/
 
 	
 	/*

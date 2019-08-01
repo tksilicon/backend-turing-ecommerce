@@ -42,7 +42,7 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
 				.antMatchers(HttpMethod.POST, "/api/products/{product_id}/reviews").authenticated()
 				.antMatchers("/api/customer").authenticated().antMatchers("/api/customers/address").authenticated()
-				.antMatchers("/api/customers/creditCard").authenticated().antMatchers("/api//orders").authenticated()
+				.antMatchers("/api/customers/creditCard").authenticated().antMatchers("/api/orders").authenticated()
 				.antMatchers("/api/orders/{order_id}").authenticated().antMatchers("/api/orders/inCustomer")
 				.authenticated().antMatchers("/api/orders/shortDetail/{order_id}").authenticated()
 				//.antMatchers("/api/stripe/charge").authenticated()
