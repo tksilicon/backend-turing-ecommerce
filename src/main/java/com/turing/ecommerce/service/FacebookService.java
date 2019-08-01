@@ -26,20 +26,15 @@ public class FacebookService {
     
     String accessToken;
     
+ 
     
-    public String createFacebookAuthorizationURL(){
-        FacebookConnectionFactory connectionFactory = new FacebookConnectionFactory(facebookAppId, facebookSecret);
-        OAuth2Operations oauthOperations = connectionFactory.getOAuthOperations();
-        OAuth2Parameters params = new OAuth2Parameters();
-        params.setRedirectUri("https://localhost:8443/facebook/");
-        params.setScope("public_profile,email,user_birthday");
-        return oauthOperations.buildAuthorizeUrl(params);
-    }
-    
-    public void createFacebookAccessToken(String code) {
+    public String createFacebookAccessToken(String code) {
         FacebookConnectionFactory connectionFactory = new FacebookConnectionFactory(facebookAppId, facebookSecret);
         AccessGrant accessGrant = connectionFactory.getOAuthOperations().exchangeForAccess(code, "https://localhost:8443/facebook/", null);
         accessToken = accessGrant.getAccessToken();
+    
+        
+        return  accessToken;
     }
     
     public String getName() {

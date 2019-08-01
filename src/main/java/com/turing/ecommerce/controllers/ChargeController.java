@@ -10,17 +10,11 @@ import com.stripe.Stripe;
  */
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
-import com.stripe.model.Event;
-import com.stripe.model.Token;
 import com.stripe.model.WebhookEndpoint;
-import com.stripe.net.ApiResource;
 import com.stripe.net.StripeResponse;
 import com.turing.ecommerce.DTO.ChargeRequest;
-import com.turing.ecommerce.DTO.ProductGetAllDTO;
 import com.turing.ecommerce.DTO.Unauthorized;
-import com.turing.ecommerce.DTO.ChargeRequest.Currency;
 import com.turing.ecommerce.exceptions.error;
-import com.turing.ecommerce.service.StripeService;
 import com.turing.ecommerce.service.StripeServiceImpl;
 
 import io.swagger.annotations.Api;
@@ -32,25 +26,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.WebRequest;
 
 @Api(value = "Everything about Stripe Ingregation and Webhooks, "
 		+ " Generate token for care from - https://codepen.io/fmartingr/pen/pGfhy"

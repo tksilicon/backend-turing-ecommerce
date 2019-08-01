@@ -194,13 +194,12 @@ public class CustomerController {
 	@Resource(name = "facebookServiceImpl")
     FacebookService facebookService;
 
-    @GetMapping("/api/createFacebookAuthorization")
-    public String createFacebookAuthorization(){
-        return facebookService.createFacebookAuthorizationURL();
-    }
-    @GetMapping("/facebook")
-    public void createFacebookAccessToken(@RequestParam("code") String code){
-        facebookService.createFacebookAccessToken(code);
+    
+    @PostMapping("/api/customers/facebook")
+    public ResponseEntity createFacebookAccessToken(@RequestParam("access_token") String access_token){
+       String accessToken = facebookService.createFacebookAccessToken(access_token);
+       
+       return ResponseEntity.ok().body(accessToken);
     }
 	
 
@@ -217,10 +216,6 @@ public class CustomerController {
 		return ok(model);
 	}
 
-	@GetMapping("/api/customers/getName")
-	public String getNameResponse(){
-	    return facebookService.getName();
-	}
 	
 	/*
 	 * API endpoint to register customers
