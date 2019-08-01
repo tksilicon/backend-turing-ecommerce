@@ -10,13 +10,14 @@ import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 import org.springframework.social.oauth2.AccessGrant;
 import org.springframework.social.oauth2.OAuth2Operations;
 import org.springframework.social.oauth2.OAuth2Parameters;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
  * @author frankukachukwu
  *
  */
-@Service(value="facebookServiceImpl")
+@Component
 public class FacebookService {
 
     @Value("${spring.social.facebook.appId}")

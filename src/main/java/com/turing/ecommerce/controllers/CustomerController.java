@@ -193,7 +193,7 @@ public class CustomerController {
 	}
 	
 
-	@Resource(name = "facebookServiceImpl")
+	@Autowired
     FacebookService facebookService;
 
     
