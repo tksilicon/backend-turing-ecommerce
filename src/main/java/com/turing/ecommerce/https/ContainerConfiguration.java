@@ -17,12 +17,12 @@ import org.springframework.context.annotation.Configuration;
  * @author thankgodukachukwu
  *
  */
-@Configuration
+//@Configuration
 public class ContainerConfiguration {
 
 	
 	
-	@Bean
+	//@Bean
     public ServletWebServerFactory servletContainer() {
         TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() {
             @Override

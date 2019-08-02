@@ -10,9 +10,11 @@ import com.stripe.Stripe;
  */
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
+import com.stripe.model.StripeObject;
 import com.stripe.model.WebhookEndpoint;
 import com.stripe.net.StripeResponse;
 import com.turing.ecommerce.DTO.ChargeRequest;
+import com.turing.ecommerce.DTO.StripePayObject;
 import com.turing.ecommerce.DTO.Unauthorized;
 import com.turing.ecommerce.exceptions.error;
 import com.turing.ecommerce.service.StripeServiceImpl;
@@ -66,12 +68,12 @@ public class ChargeController {
 
 	@CrossOrigin
 	@ApiOperation(value = "This method recieves a frond-end payment and creates a charge")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Object from Stripe"),
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Object from Stripe", response=StripePayObject.class),
 			@ApiResponse(code = 400, message = "Return a error object", response = error.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = Unauthorized.class) })
 
 	@PostMapping("/api/stripe/charge")
-	public ResponseEntity<String> charge(
+	public ResponseEntity<StripePayObject> charge(
 
 			@RequestParam(name = "aStripeToken", required = true) String aStripeToken,
 			@RequestParam(name = "order_id", required = true) Integer order_id,
@@ -90,8 +92,18 @@ public class ChargeController {
 
 		Charge charge = stripeClient.charge(chargeRequest);
 		StripeResponse response = charge.getLastResponse();
+		
+		StripePayObject striper = new StripePayObject();
+		striper.setAmount(amount);
+		striper.setDescription(description);
+		striper.setOrderId(order_id);
+		
+		
+		striper.setStatus((charge.getStatus()));
+		
+		return ResponseEntity.ok(striper);
 
-		return new ResponseEntity<String>(response.body(), HttpStatus.OK);
+		
 
 	}
 
