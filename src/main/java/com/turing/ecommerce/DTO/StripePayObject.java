@@ -19,7 +19,7 @@ public class StripePayObject {
 	
 	
 	private String status;
-	private Integer amount;
+	private Long amount;
 	private String description;
 	private Integer orderId;
 

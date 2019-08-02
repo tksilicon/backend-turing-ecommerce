@@ -91,10 +91,10 @@ public class ChargeController {
 		chargeRequest.setAmount(amount);
 
 		Charge charge = stripeClient.charge(chargeRequest);
-		StripeResponse response = charge.getLastResponse();
+		//StripeResponse response = charge.getLastResponse();
 		
 		StripePayObject striper = new StripePayObject();
-		striper.setAmount(amount);
+		striper.setAmount(charge.getAmount());
 		striper.setDescription(description);
 		striper.setOrderId(order_id);
 		
