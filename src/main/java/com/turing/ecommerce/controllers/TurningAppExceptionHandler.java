@@ -21,6 +21,7 @@ import com.stripe.exception.StripeException;
 import com.turing.ecommerce.exceptions.ApiErrorResponse;
 import com.turing.ecommerce.exceptions.CustomerExistException;
 import com.turing.ecommerce.exceptions.CustomerNotFoundException;
+import com.turing.ecommerce.exceptions.FacebookException;
 import com.turing.ecommerce.exceptions.OrderDetailNotFoundException;
 import com.turing.ecommerce.exceptions.ProductNotFoundException;
 import com.turing.ecommerce.exceptions.ProductsGetProductsException;
@@ -297,5 +298,16 @@ public class TurningAppExceptionHandler extends ResponseEntityExceptionHandler {
     }
     
 	
+    /**
+     * Handle FacebookException
+     */
+    @ExceptionHandler(FacebookException.class)
+    protected ResponseEntity<Object> handleFacebookException(FacebookException ex) {
+    	ApiErrorResponse errorResponse = new ApiErrorResponse("FBK_01", ex.getMessage(),
+				ex.getCause().getMessage(), String.valueOf(HttpStatus.BAD_REQUEST));
+
+		return new ResponseEntity<Object>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+    
 
 }

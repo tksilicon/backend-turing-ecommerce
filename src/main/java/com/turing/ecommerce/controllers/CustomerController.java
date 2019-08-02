@@ -9,6 +9,8 @@ import static org.springframework.http.ResponseEntity.ok;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -25,10 +27,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,9 +49,13 @@ import com.turing.ecommerce.DTO.AuthenticationRequest;
 import com.turing.ecommerce.DTO.CustomerAddressForm;
 import com.turing.ecommerce.DTO.CustomerCreditCardForm;
 import com.turing.ecommerce.DTO.CustomerForm;
+import com.turing.ecommerce.DTO.CustomerRegister;
 import com.turing.ecommerce.DTO.CustomerUpdateForm;
+import com.turing.ecommerce.DTO.ProductGetAllDTO;
 import com.turing.ecommerce.exceptions.CustomerExistException;
 import com.turing.ecommerce.exceptions.CustomerNotFoundException;
+import com.turing.ecommerce.exceptions.FacebookException;
+import com.turing.ecommerce.exceptions.error;
 import com.turing.ecommerce.facebook.Facebook;
 import com.turing.ecommerce.facebook.Profile;
 import com.turing.ecommerce.model.Customer;
@@ -55,8 +64,10 @@ import com.turing.ecommerce.security.jwt.JwtTokenProvider;
 import com.turing.ecommerce.service.CustomCustomerDetailsService;
 import com.turing.ecommerce.service.CustomerService;
 
-
-
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 /**
  * 
@@ -65,7 +76,7 @@ import com.turing.ecommerce.service.CustomerService;
  * @author thankgodukachukwu
  *
  */
-
+@Api(value = "Everything about Customers")
 @RestController
 public class CustomerController {
 
@@ -74,8 +85,6 @@ public class CustomerController {
 
 	@Resource(name = "customCustomerDetailsService")
 	private CustomCustomerDetailsService customCustomerDetailsService;
-	
-	
 
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -88,8 +97,6 @@ public class CustomerController {
 
 	@Autowired
 	CustomerRepository users;
-	
-	
 
 	/*
 	 * API endpoint to update customers
@@ -134,16 +141,15 @@ public class CustomerController {
 
 			String username = data.getUsername();
 
-			Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
+			Authentication authentication = authenticationManager
+					.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
 			SecurityContextHolder.getContext().setAuthentication(authentication);
-			
+
 			String token = jwtTokenProvider.createToken(username,
 					this.users.findByEmail(username)
 							.orElseThrow(
 									() -> new UsernameNotFoundException("The email +" + username + " doesn't exist"))
 							.getRoles());
-			
-			
 
 			Map<Object, Object> model = new HashMap<Object, Object>();
 			model.put("username", username);
@@ -170,15 +176,13 @@ public class CustomerController {
 			throw new BadCredentialsException("Email or Password is invalid");
 		}
 	}
-	
-	
-	@RequestMapping(value="/")
+
+	@RequestMapping(value = "/")
 	public ModelAndView firstPage() {
-		
+
 		return new ModelAndView("redirect:/swagger-ui.html");
-		
+
 	}
-	
 
 	@SuppressWarnings("rawtypes")
 	@GetMapping("/api/customer")
@@ -192,32 +196,63 @@ public class CustomerController {
 				.collect(toList()));
 		return ok(model);
 	}
-	
-	
-	/**private Facebook facebook;
-	
-	@Autowired
-	public CustomerController(Facebook facebook) {
-		this.facebook = facebook;
-	}
-	
-	
-	
-	
-	@GetMapping("/api/customers/facebook")
-	public String home(Model model) {
-		
-		model.addAttribute("profile", facebook.getProfile());
-		model.addAttribute("feed", facebook.getFeed());
-		
-	
-		
-		return "home";
-		
-	
-	}**/
 
-	
+	@ApiOperation(value = "Sign in with a facebook login token", response = Map.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Return a Object of Customer with auth credencials", response = CustomerRegister.class),
+			@ApiResponse(code = 400, message = "Return a error object", response = error.class) })
+
+	@PostMapping("/api/customers/facebook")
+	public ResponseEntity<Map<String, Object>> home(
+			@RequestParam(name = "access_token", required = true) String access_token) {
+
+		Facebook fb = null;
+		try {
+			fb = new Facebook(access_token);
+
+		} catch (Exception ex) {
+			new FacebookException("Couldn't login to Facebook");
+		}
+		String username = fb.getProfile().getEmail();
+		Customer existed =
+
+				customerService.findByEmail(username)
+						.orElseThrow(() -> new CustomerNotFoundException("(Email is not registered"));
+		
+
+		try {
+
+			Authentication authentication = new UsernamePasswordAuthenticationToken(username, null,
+					AuthorityUtils.createAuthorityList("USER"));
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+
+			List<String> roles = new LinkedList<String>();
+			roles.add("USER");
+
+			String token = jwtTokenProvider.createToken(username, roles);
+
+			Map<String, Object> mapResponse = new LinkedHashMap<String, Object>();
+
+			Map<String, Object> mapResponse2 = new LinkedHashMap<String, Object>();
+			mapResponse2.put("schema", existed);
+			
+			mapResponse.put("Customer", mapResponse2);
+
+			mapResponse.put("accessToken", "Bearer " + token);
+			mapResponse.put("expires_in", "24h");
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.add(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8");
+			headers.add("USER_KEY", "Bearer " + token);
+
+			return ResponseEntity.ok().headers(headers).body(mapResponse);
+
+		} catch (Exception ex) {
+			throw new FacebookException("Facebook Login didn't succeed");
+		}
+
+	}
+
 	/*
 	 * API endpoint to register customers
 	 */
