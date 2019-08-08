@@ -46,12 +46,14 @@ import com.turing.ecommerce.model.ShoppingCart;
 import com.turing.ecommerce.service.CartService;
 import com.turing.ecommerce.utils.Uid;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;;
 
 /**
  * @author thankgodukachukwu
  *
  */
+@Api(value = "Everything about Shopping Cart")
 @RestController
 public class CartController {
 

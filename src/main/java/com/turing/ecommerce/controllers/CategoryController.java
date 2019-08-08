@@ -20,6 +20,7 @@ import com.turing.ecommerce.model.ProductCategory;
 import com.turing.ecommerce.service.CategoryService;
 import com.turing.ecommerce.service.ProdCatDAOServiceImpl;
 
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -28,7 +29,7 @@ import lombok.RequiredArgsConstructor;
  * @author ThankGod Ukachukwu
  *
  */
-
+@Api(value = "Everything about Categories")
 @RestController
 public class CategoryController {
 

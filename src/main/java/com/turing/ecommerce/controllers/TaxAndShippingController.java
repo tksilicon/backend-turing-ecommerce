@@ -20,10 +20,13 @@ import com.turing.ecommerce.service.ShippingRegionService;
 import com.turing.ecommerce.service.ShippingService;
 import com.turing.ecommerce.service.TaxService;
 
+import io.swagger.annotations.Api;
+
 /**
  * @author thankgodukachukwu
  *
  */
+@Api(value = "Everything about Taxes and Shipping")
 @RestController
 public class TaxAndShippingController {
 	

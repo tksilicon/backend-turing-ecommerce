@@ -15,6 +15,8 @@ import com.turing.ecommerce.exceptions.DepartmentNotFoundException;
 import com.turing.ecommerce.model.Department;
 import com.turing.ecommerce.service.DepartmentService;
 
+import io.swagger.annotations.Api;
+
 
 
 /**
@@ -24,7 +26,7 @@ import com.turing.ecommerce.service.DepartmentService;
  *
  */
 
-
+@Api(value = "Everything about Departments")
 @RestController
 public class DepartmentController {
 

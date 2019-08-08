@@ -110,6 +110,8 @@ public class ControllerTestClass {
 
 	private String emailAddress;
 	private String password;
+	
+	
 
 	public String getEmail() {
 		// Generate different email for testing

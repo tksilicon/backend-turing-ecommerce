@@ -31,6 +31,8 @@ import com.turing.ecommerce.model.OrderDetail;
 import com.turing.ecommerce.service.CustomerService;
 import com.turing.ecommerce.service.OrdersService;
 
+import io.swagger.annotations.Api;
+
 /**
  * 
  * Order Controller for all Rest APIs endpoints related to Order.
@@ -38,8 +40,8 @@ import com.turing.ecommerce.service.OrdersService;
  * @author thankgodukachukwu
  *
  */
+@Api(value = "Everything about Orders")
 @RestController
-
 public class OrderController {
 
 	@Resource(name = "ordersServiceImpl")
