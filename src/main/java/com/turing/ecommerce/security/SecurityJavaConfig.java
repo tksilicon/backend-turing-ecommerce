@@ -46,20 +46,6 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
         		"/webjars/springfox-swagger-ui/**");
         		
         		
-        		
-        		/*"/webjars/springfox-swagger-ui/springfox.css",
-        		
-				
-        		"/webjars/springfox-swagger-ui/swagger-ui-bundle.js",
-        		"/webjars/springfox-swagger-ui/swagger-ui.css",
-        		"/webjars/springfox-swagger-ui/swagger-ui-standalone-preset.js",
-        		"/webjars/springfox-swagger-ui/favicon-16x16.png",
-        		"/webjars/springfox-swagger-ui/springfox.js"
-				);*/
-        
-        // ignore swagger 
-        //web.ignoring().mvcMatchers("/swagger-ui.html/**", "/configuration/**", 
-        		//"/swagger-resources/**", "/v2/api-docs");
  
 	}
 
