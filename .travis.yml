@@ -1,5 +1,8 @@
 language: java
-jdk: oraclejdk8
+jdk: oraclejdk9
+
+before_install:
+  - gem install bundler
 
 script:
 - ./mvnw clean install -B
