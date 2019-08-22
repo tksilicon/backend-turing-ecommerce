@@ -22,6 +22,12 @@ List of endpoints can be found here:
 https://backend-turing-ecommerce.herokuapp.com/swagger-ui.html
 
 
+Run SQL file in Database folder on local host for customer authentication test to run. Remove @Ignore from class in com/turing/ecommerce/TuringApplicationTests.java
+
+point spring datasource in application properties to localhost. 
+
+
+
 Hours spent on the project - Minimum of 12 hours for 14 days (168hours)
 
 

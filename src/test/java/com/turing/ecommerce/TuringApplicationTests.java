@@ -119,7 +119,7 @@ public class TuringApplicationTests {
 
 		token = given()
 				.contentType(ContentType.JSON).body(AuthenticationRequest.builder()
-						.username("u9ytrqq@gmail.com").password("thankgod").build())
+						.username("jameswong@turing.com").password("james").build())
 				.when().post("/api/customers/login").andReturn().jsonPath().getString("access_token");
 		
 		log.debug("Got token:" + token);
