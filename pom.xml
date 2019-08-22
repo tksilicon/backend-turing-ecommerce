@@ -169,10 +169,96 @@
 	</dependencies>
 	<build>
 		<plugins>
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.9</version>
+				<configuration>
+					<excludes>
+						<exclude>com/turing/ecommerce/exceptions/*</exclude>
+						<exclude>com/turing/ecommerce/*Application</exclude>
+						<exclude>com/turing/ecommerce/DTO/*</exclude>
+						<exclude>com/turing/ecommerce/config/*</exclude>
+						<exclude>com/turing/ecommerce/facebook/*</exclude>
+						<exclude>com/turing/ecommerce/facebook/api/*</exclude>
+						<exclude>com/turing/ecommerce/https/*</exclude>
+						<exclude>com/turing/ecommerce/model/*</exclude>
+						<exclude>com/turing/ecommerce/repository/*</exclude>
+						<exclude>com/turing/ecommerce/swagger/*</exclude>
+						<exclude>com/turing/ecommerce/utils/*</exclude>
+						<exclude>com/turing/ecommerce/validator/*</exclude>
+						<exclude>com/turing/ecommerce/security/*</exclude>
+						<exclude>com/turing/ecommerce/security/jwt/*</exclude>
+				
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<id>default-prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>default-prepare-agent-integration</id>
+						<goals>
+							<goal>prepare-agent-integration</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>default-report</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+					
+					<!--<execution>
+						<id>report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>-->
+					<execution>
+						<id>default-report-integration</id>
+						<goals>
+							<goal>report-integration</goal>
+						</goals>
+					</execution>
+					
+					<execution>
+						<id>default-check</id>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<!-- implementation is needed only for Maven 2 -->
+								<rule implementation="org.jacoco.maven.RuleConfiguration">
+									<element>BUNDLE</element>
+									<limits>
+										<!-- implementation is needed only for Maven 2 -->
+										<limit implementation="org.jacoco.report.check.Limit">
+											<counter>COMPLEXITY</counter>
+											<value>COVEREDRATIO</value>
+											<minimum>0.40</minimum>
+										</limit>
+									</limits>
+								</rule>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+
 		</plugins>
 	</build>
 

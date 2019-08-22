@@ -1,4 +1,4 @@
-package com.turing.ecommerce.controllers;
+package com.turing.ecommerce.config;
 
 import java.util.List;
 
@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.stripe.exception.StripeException;
 import com.turing.ecommerce.exceptions.ApiErrorResponse;
+import com.turing.ecommerce.exceptions.ChargeException;
 import com.turing.ecommerce.exceptions.CustomerExistException;
 import com.turing.ecommerce.exceptions.CustomerNotFoundException;
 import com.turing.ecommerce.exceptions.FacebookException;
@@ -41,14 +42,18 @@ public class TurningAppExceptionHandler extends ResponseEntityExceptionHandler {
 
 		List<Object> params = ex.getParams();
 
-		String output = "";
-		for (int i = 0; i < params.size(); i++)
-			output += params.get(i) + ", ";
+		
+		StringBuilder output = new StringBuilder("");
+		for (int i = 0; i < params.size(); i++) {
+			output.append(params.get(i));
+			output.append( ", ");
+		}
+			
 
-		ApiErrorResponse exceptionResponse = new ApiErrorResponse("USR_11", ex.getMessage(), output,
+		ApiErrorResponse exceptionResponse = new ApiErrorResponse("USR_11", ex.getMessage(), output.toString(),
 				String.valueOf(HttpStatus.BAD_REQUEST.value()));
 
-		return new ResponseEntity<ApiErrorResponse>(exceptionResponse, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
 
 	}
 
@@ -71,7 +76,7 @@ public class TurningAppExceptionHandler extends ResponseEntityExceptionHandler {
 
 		errorResponse.addValidationErrors(ex.getBindingResult().getFieldErrors());
 
-		return new ResponseEntity<Object>(errorResponse, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 
 	/**
@@ -87,7 +92,7 @@ public class TurningAppExceptionHandler extends ResponseEntityExceptionHandler {
 		ApiErrorResponse errorResponse = new ApiErrorResponse("USR_21", ex.getMessage(),
 				"JSon String", String.valueOf(HttpStatus.BAD_REQUEST));
 
-		return new ResponseEntity<ApiErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 
 	/**
@@ -104,7 +109,7 @@ public class TurningAppExceptionHandler extends ResponseEntityExceptionHandler {
 		ApiErrorResponse errorResponse = new ApiErrorResponse("USR_19", String.valueOf(HttpStatus.BAD_REQUEST));
 		errorResponse.addValidationErrors(ex.getConstraintViolations());
 
-		return new ResponseEntity<ApiErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 
 	/**
@@ -125,7 +130,7 @@ public class TurningAppExceptionHandler extends ResponseEntityExceptionHandler {
 
 		ApiErrorResponse errorResponse = new ApiErrorResponse("USR_20", "Malformed JSON request", "JSon String",
 				String.valueOf(HttpStatus.BAD_REQUEST));
-		return new ResponseEntity<Object>(errorResponse, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 
 	/**
@@ -149,7 +154,7 @@ public class TurningAppExceptionHandler extends ResponseEntityExceptionHandler {
 		ApiErrorResponse errorResponse = new ApiErrorResponse("USR_DATA", ex.getMessage(), ex.getCause().getMessage(),
 				String.valueOf(HttpStatus.BAD_REQUEST));
 
-		return new ResponseEntity<ApiErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 	
 	/**
@@ -167,7 +172,7 @@ public class TurningAppExceptionHandler extends ResponseEntityExceptionHandler {
 		ApiErrorResponse errorResponse = new ApiErrorResponse("USR_05", "The email doesn't exist.",
 				"Email", String.valueOf(HttpStatus.BAD_REQUEST));
 
-		return new ResponseEntity<ApiErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 	
 	
@@ -186,7 +191,7 @@ public class TurningAppExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		ApiErrorResponse errorResponse = new ApiErrorResponse("Endpoint not found.");
 
-		return new ResponseEntity<ApiErrorResponse>(errorResponse, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
 	}
 	
 	/**
@@ -205,7 +210,7 @@ public class TurningAppExceptionHandler extends ResponseEntityExceptionHandler {
 				"Stripe", String.valueOf(HttpStatus.BAD_REQUEST));
 
 
-		return new ResponseEntity<ApiErrorResponse>(errorResponse, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
 	}
 	
 	/**
@@ -223,7 +228,7 @@ public class TurningAppExceptionHandler extends ResponseEntityExceptionHandler {
 		ApiErrorResponse errorResponse = new ApiErrorResponse("USR_04", "The email already exists."
 				+ "Email", String.valueOf(HttpStatus.BAD_REQUEST));
 
-		return new ResponseEntity<ApiErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 	
 	/**
@@ -241,7 +246,7 @@ public class TurningAppExceptionHandler extends ResponseEntityExceptionHandler {
 		ApiErrorResponse errorResponse = new ApiErrorResponse("USR_01", "Email or Password is invalid",
 				"Email/Password", String.valueOf(HttpStatus.BAD_REQUEST));
 
-		return new ResponseEntity<ApiErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 	
 	
@@ -260,7 +265,7 @@ public class TurningAppExceptionHandler extends ResponseEntityExceptionHandler {
 		ApiErrorResponse errorResponse = new ApiErrorResponse("PRO_01", "Product Not found"
 				+ "Product", String.valueOf(HttpStatus.NOT_FOUND));
 
-		return new ResponseEntity<ApiErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 	
 	
@@ -282,7 +287,7 @@ public class TurningAppExceptionHandler extends ResponseEntityExceptionHandler {
 		ApiErrorResponse errorResponse = new ApiErrorResponse("USR_P1", ex.getMessage(),
 				ex.getCause().getMessage(), String.valueOf(HttpStatus.BAD_REQUEST));
 
-		return new ResponseEntity<ApiErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 	
 	
@@ -294,7 +299,7 @@ public class TurningAppExceptionHandler extends ResponseEntityExceptionHandler {
     	ApiErrorResponse errorResponse = new ApiErrorResponse("CAT_01", ex.getMessage(),
 				ex.getCause().getMessage(), String.valueOf(HttpStatus.BAD_REQUEST));
 
-		return new ResponseEntity<Object>(errorResponse, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
     
 	
@@ -306,8 +311,21 @@ public class TurningAppExceptionHandler extends ResponseEntityExceptionHandler {
     	ApiErrorResponse errorResponse = new ApiErrorResponse("FBK_01", ex.getMessage(),
 				ex.getCause().getMessage(), String.valueOf(HttpStatus.BAD_REQUEST));
 
-		return new ResponseEntity<Object>(errorResponse, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+    
+    /**
+     * Handle ChargeException
+     */
+    @ExceptionHandler(ChargeException.class)
+    protected ResponseEntity<Object> handleFacebookException(ChargeException ex) {
+    	ApiErrorResponse errorResponse = new ApiErrorResponse("FBK_01", ex.getMessage(),
+				ex.getCause().getMessage(), String.valueOf(HttpStatus.BAD_REQUEST));
+
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+    
+    
     
 
 }

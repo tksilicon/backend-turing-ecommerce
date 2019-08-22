@@ -15,6 +15,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,6 +50,7 @@ import io.swagger.annotations.ApiResponses;
  * @author thankGodukachukwu
  * 
  */
+
 @Api(value = "Everything About Products")
 @RestController
 public class ProductController {
@@ -65,17 +67,18 @@ public class ProductController {
 	/*
 	 * API to return all products
 	 */
+	
 	@ApiOperation(value = "Get All Products", response = Map.class)
 	@ApiResponses(value = {
             @ApiResponse(code = 200, message = "Return the total of products and a list of Products in row.", response = ProductGetAllDTO.class ),
             @ApiResponse(code = 400, message = "Return a error object", response = error.class) })
 	
 	@GetMapping(path = "/api/products")
+	
 	public ResponseEntity<Map<String, Object>> getAll(HttpServletRequest request,
 			@RequestParam(name = "page", required = false, defaultValue = "1") @Min(1) Integer page,
 			@RequestParam(name = "limit", required = false, defaultValue ="20") Integer limit,
-			@RequestParam(name = "description_length", required = false, defaultValue = "200") Integer description_length)
-			throws ProductsGetProductsException {
+			@RequestParam(name = "description_length", required = false, defaultValue = "200") Integer description_length){
 
 		Map<String, Object> products = null;
 

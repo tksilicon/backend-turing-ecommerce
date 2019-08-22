@@ -1,4 +1,4 @@
-package com.turing.ecommerce.controllers;
+package com.turing.ecommerce.config;
 
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;

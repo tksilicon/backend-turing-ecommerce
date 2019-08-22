@@ -3,19 +3,31 @@
  */
 package com.turing.ecommerce.controllers;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.stripe.Stripe;
-/**
- * @author frankukachukwu
- *
- */
+import com.stripe.exception.ApiConnectionException;
+import com.stripe.exception.ApiException;
+import com.stripe.exception.AuthenticationException;
+import com.stripe.exception.CardException;
+import com.stripe.exception.InvalidRequestException;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
-import com.stripe.model.StripeObject;
 import com.stripe.model.WebhookEndpoint;
-import com.stripe.net.StripeResponse;
 import com.turing.ecommerce.DTO.ChargeRequest;
 import com.turing.ecommerce.DTO.StripePayObject;
 import com.turing.ecommerce.DTO.Unauthorized;
+import com.turing.ecommerce.exceptions.ChargeException;
 import com.turing.ecommerce.exceptions.error;
 import com.turing.ecommerce.service.StripeServiceImpl;
 
@@ -23,19 +35,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+/**
+ * @author thankgodukachukwu
+ *
+ */
 
 @Api(value = "Everything about Stripe Ingregation and Webhooks, "
 		+ " Generate token for care from - https://codepen.io/fmartingr/pen/pGfhy"
@@ -51,7 +54,7 @@ public class ChargeController {
 	}
 
 	/*
-	 * API to search all products
+	 * 
 	 * 
 	 * Generate token for care from - https://codepen.io/fmartingr/pen/pGfhy Using
 	 * sample card:
@@ -79,7 +82,7 @@ public class ChargeController {
 			@RequestParam(name = "order_id", required = true) Integer order_id,
 			@RequestParam(name = "description", required = true) String description,
 			@RequestParam(name = "amount", required = true) Integer amount,
-			@RequestParam(name = "currency", required = false, defaultValue = "USD") String currency) throws Exception {
+			@RequestParam(name = "currency", required = false, defaultValue = "USD") String currency) throws AuthenticationException, InvalidRequestException, ApiConnectionException, CardException, ApiException, StripeException {
 
 		ChargeRequest chargeRequest = new ChargeRequest();
 		chargeRequest.setDescription(description);
@@ -91,7 +94,7 @@ public class ChargeController {
 		chargeRequest.setAmount(amount);
 
 		Charge charge = stripeClient.charge(chargeRequest);
-		//StripeResponse response = charge.getLastResponse();
+		
 		
 		StripePayObject striper = new StripePayObject();
 		striper.setAmount(charge.getAmount());
@@ -112,7 +115,7 @@ public class ChargeController {
 	public ResponseEntity webhooks(Model model) throws StripeException {
 		Stripe.apiKey = "sk_test_lomdOfxbm7QDgZWvR82UhV6D";
 
-		Map<String, Object> webhookendpointParams = new HashMap<String, Object>();
+		Map<String, Object> webhookendpointParams = new HashMap<>();
 		webhookendpointParams.put("url", "https://backend-turing-ecommerce.herokuapp.com/api/stripe/webhooks");
 		webhookendpointParams.put("enabled_events", Arrays.asList("charge.failed", "charge.succeeded"));
 

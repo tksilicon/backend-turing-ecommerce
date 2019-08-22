@@ -1,58 +1,19 @@
-package com.turing.ecommerce.controllers;
+package com.turing.ecommerce;
 
-import org.springframework.boot.test.context.SpringBootTest;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stripe.model.Charge;
-import com.turing.ecommerce.DTO.AttributeDTO;
-import com.turing.ecommerce.DTO.AttributesProductDTO;
-import com.turing.ecommerce.DTO.AuthenticationRequest;
-import com.turing.ecommerce.DTO.CategoryAllDTO;
-import com.turing.ecommerce.DTO.CategoryDTO;
-import com.turing.ecommerce.DTO.CategoryBasic;
-import com.turing.ecommerce.DTO.ChargeRequest;
-import com.turing.ecommerce.DTO.ChargeRequest.Currency;
-import com.turing.ecommerce.DTO.CustomerForm;
-import com.turing.ecommerce.DTO.CustomerUpdateForm;
-import com.turing.ecommerce.DTO.DepartmentDTO;
-import com.turing.ecommerce.DTO.ProductInDepartment;
-import com.turing.ecommerce.DTO.ProductDetail;
-import com.turing.ecommerce.DTO.ProductLocations;
-import com.turing.ecommerce.DTO.ProductReviewDTO;
-import com.turing.ecommerce.DTO.ReviewDTO;
-import com.turing.ecommerce.DTO.ShoppingCartForm;
-import com.turing.ecommerce.DTO.CartWithProduct;
-import com.turing.ecommerce.model.Customer;
-import com.turing.ecommerce.model.Product;
-import com.turing.ecommerce.model.ShoppingCart;
-import com.turing.ecommerce.service.AttributeDAOService;
-import com.turing.ecommerce.service.AttributesService;
-import com.turing.ecommerce.service.CartService;
-import com.turing.ecommerce.service.CategoryService;
-import com.turing.ecommerce.service.CustomerService;
-import com.turing.ecommerce.service.DepartmentService;
-import com.turing.ecommerce.service.ProdCatDAOService;
-import com.turing.ecommerce.service.ProductService;
-import com.turing.ecommerce.service.StripeService;
-import com.turing.ecommerce.utils.Uid;
-
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import lombok.extern.slf4j.Slf4j;
-
+import static org.junit.Assert.assertEquals;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import javax.validation.Valid;
 
 import org.json.JSONObject;
 import org.junit.Before;
@@ -60,84 +21,73 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-
-import static io.restassured.RestAssured.given;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.BDDMockito.given;
-import org.springframework.test.context.junit4.SpringRunner;
-
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stripe.model.Charge;
+import com.turing.ecommerce.DTO.AttributeDTO;
+import com.turing.ecommerce.DTO.AttributesProductDTO;
+import com.turing.ecommerce.DTO.CartWithProduct;
+import com.turing.ecommerce.DTO.CategoryAllDTO;
+import com.turing.ecommerce.DTO.CategoryBasic;
+import com.turing.ecommerce.DTO.CategoryDTO;
+import com.turing.ecommerce.DTO.ChargeRequest;
+import com.turing.ecommerce.DTO.ChargeRequestTest;
+import com.turing.ecommerce.DTO.DepartmentDTO;
+import com.turing.ecommerce.DTO.ProductDetail;
+import com.turing.ecommerce.DTO.ProductInDepartment;
+import com.turing.ecommerce.DTO.ProductLocations;
+import com.turing.ecommerce.DTO.ProductReviewDTO;
+import com.turing.ecommerce.DTO.ReviewDTO;
+import com.turing.ecommerce.DTO.ShoppingCartForm;
+import com.turing.ecommerce.model.Product;
+import com.turing.ecommerce.service.AttributeDAOService;
+import com.turing.ecommerce.service.AttributesService;
+import com.turing.ecommerce.service.CartService;
+import com.turing.ecommerce.service.CategoryService;
+import com.turing.ecommerce.service.DepartmentService;
+import com.turing.ecommerce.service.ProdCatDAOService;
+import com.turing.ecommerce.service.ProductService;
+import com.turing.ecommerce.service.StripeServiceImpl;
+import com.turing.ecommerce.utils.Uid;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 
  *
  * @author thankgodukachukwu
  */
-@Slf4j
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ControllerTestClass {
+public class ControllerTests {
 
 	@Autowired
 	private WebApplicationContext wac;
 
 	private MockMvc mockMvc;
 
-	@LocalServerPort
-	int port;
-
-	@Autowired
 	ObjectMapper objectMapper;
-
-	private String token;
-
-	private String emailAddress;
-	private String password;
 	
-	
-
-	public String getEmail() {
-		// Generate different email for testing
-		String str = Uid.generateRandomId(7, "abcdefghjkmnpqrstuvwxyz23456789", Character.LOWERCASE_LETTER);
-		emailAddress = str + "@gmail.com";
-		return emailAddress;
-
-	}
-
-	public String getPassword() {
-		return password = Uid.generateRandomId(7, "abcdefghjkmnpqrstuvwxyz23456789", Character.LOWERCASE_LETTER);
-	}
+	private String carttId = "";
 
 	@Before
 	public void setup() {
-
+		this.carttId = this.getCartId();
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
-
-		this.getEmail();
-		this.getPassword();
-
-		RestAssured.port = 8080;
-		token = given().contentType(ContentType.JSON)
-				.body(AuthenticationRequest.builder().username(emailAddress).password(password).build()).when()
-				.post("/api/customers/login").andReturn().jsonPath().getString("token");
-		log.debug("Got token:" + token);
 
 	}
 
@@ -149,6 +99,9 @@ public class ControllerTestClass {
 	 * 
 	 **/
 
+	@Test
+	public void contextLoads() {
+	}
 	@Test
 	@Transactional
 	public void testGetDepartment() throws Exception {
@@ -535,7 +488,7 @@ public class ControllerTestClass {
 
 				MockMvcRequestBuilders.get("/api/products?page=1&limit=").accept(MediaType.APPLICATION_JSON))
 
-				.andDo(print()).andExpect(status().isBadRequest())
+				.andDo(print()).andExpect(status().isOk())
 
 				.andDo(MockMvcResultHandlers.print());
 
@@ -908,111 +861,62 @@ public class ControllerTestClass {
 	}
 
 	/**
-	 * Test register a customer unit/integrated testing
+	 * Test Stripe charges
+	 * 
+	 * Generate token from - https://codepen.io/fmartingr/pen/pGfhy Using sample
+	 * card:
+	 * 
+	 * Card Num:4242424242424242 Exp Month/ Year: 8/2020 CVC 314
+	 * 
+	 * 4000056655665556
+	 * 
+	 * public key: pk_test_fcL8nZaQrozBEVAbnAD6mG2M00AxMWLiia
+	 * 
+	 * Card token: tok_1F2TBmL2eGgSu8AhlWtSB7BB
 	 * 
 	 * @throws Exception
 	 * 
 	 * 
-	 * @see {@link com.turing.ecommerce.controllers.CustomerController#registerCustomer(CustomerForm}.
+	 * @see {@link com.turing.ecommerce.controllers.ChargeControllerr#Charge(String,
+	 *      Integer, String, Integer, String}.
 	 * 
 	 * @throws Exception
 	 */
 
-	@Test
+	@Ignore
 	@Transactional
-	public void testRegisterCustomer() throws Exception {
+	public void testStripeCharge() throws Exception {
 
-		// Given
+		ChargeRequest chargeRequest = new ChargeRequest();
+		chargeRequest.setDescription("TEST CHARGE");
 
-		this.getEmail();
-		this.getPassword();
+		chargeRequest.setCurrency("USD");
 
-		CustomerForm cust = new CustomerForm();
-		cust.setEmail(this.emailAddress);
-		cust.setName("ThankGod Ukachukwu");
-		cust.setPassword(this.password);
+		chargeRequest.setStripeToken("tok_1F5xbHL2eGgSu8Ah2rLutG4a");
+		chargeRequest.setOrderId(1);
+		chargeRequest.setAmount(100);
 
-		Customer customer = new Customer();
-		customer.setEmail(this.emailAddress);
-		customer.setName(this.password);
-		customer.setPassword("somtogugu101");
+		ChargeRequestTest chargeRequest2 = new ChargeRequestTest();
+		chargeRequest2.setDescription("TEST CHARGE");
 
-		CustomerService mock = org.mockito.Mockito.mock(CustomerService.class);
+		chargeRequest2.setCurrency("USD");
 
-		given(mock.findByEmail(cust.getEmail())).willReturn(Optional.of(customer));
+		chargeRequest2.setAStripeToken("tok_1F5xbHL2eGgSu8Ah2rLutG4a");
+		chargeRequest2.setOrder_id(1);
+		chargeRequest2.setAmount(100);
+
+		StripeServiceImpl mock = org.mockito.Mockito.mock(StripeServiceImpl.class);
+
+		given(mock.charge(chargeRequest)).willReturn(new Charge());
 
 		// when + then
-
 		ObjectMapper mapper = new ObjectMapper();
 
-		this.mockMvc.perform(
-				post("/api/customers").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(cust)))
-				.andDo(print()).andExpect(status().isOk());// .andExpect(content().json(mapper.writeValueAsString(customer)));
+		this.mockMvc.perform(post("/api/stripe/charge").contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsString(chargeRequest2))).andDo(print()).andExpect(status().isOk());// .andExpect(content().json(mapper.writeValueAsString(customer)));
 
 	}
-
-	/**
-	 * Test a post customer unit testing
-	 * 
-	 * @throws Exception
-	 * @throws JsonProcessingException
-	 * 
-	 * @see {@link com.turing.ecommerce.controllers.ProductController#productOfDepartment(CustomerForm)}.
-	 * 
-	 * @throws MethodArgumentNotValidException
-	 */
-
-	@Test
-	@Transactional
-	public void testUpdateCustomer() throws JsonProcessingException, Exception {
-		ObjectMapper mapper = new ObjectMapper();
-
-		RestAssured.port = 8080;
-		token = given().contentType(ContentType.JSON)
-				.body(AuthenticationRequest.builder().username("testingme2@yahoo.com").password("passme").build())
-				.when().post("/api/customers/login").andReturn().jsonPath().getString("token");
-		log.debug("Got token:" + token);
-
-		CustomerUpdateForm cust = new CustomerUpdateForm();
-
-		cust.setEmail("testingme2@yahoo.com");
-		cust.setName("ThankGod Ukachukwu");
-		cust.setPassword("passme");
-		cust.setDayPhone("+351323213511235");
-		cust.setEvePhone("+452436143246123");
-		cust.setMobPhone("+351323213511235");
-
-		// when + then
-		mockMvc.perform(
-				put("/api/customer").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(cust)))
-				.andDo(print()).andExpect(status().isOk());
-
-	}
-
-	/**
-	 * Test a get customer unit testing
-	 * 
-	 * @throws Exception
-	 * @throws JsonProcessingException
-	 * 
-	 * @see {@link com.turing.ecommerce.controllers.CustomerController#getCustomerById(Authentication)}.
-	 * 
-	 * @throws Exception
-	 */
-
-	@Test
-	public void getCustomer() throws Exception {
-		// @formatter:off
-		given()
-
-				.accept(ContentType.JSON)
-
-				.when().get("http://localhost:" + port + "/api/customer")
-
-				.then().assertThat().statusCode(200);
-		// @formatter:on
-	}
-
+	
 	/**
 	 * Test add to cart unit/integrated testing
 	 * 
@@ -1024,18 +928,8 @@ public class ControllerTestClass {
 	 * @throws Exception
 	 */
 
-	private String carttId = null;
-
 	@Test
-	@Transactional
 	public void testAddToCart() throws Exception {
-
-		// Generate different email for testing
-		this.carttId = Uid.generateRandomId(7, "abcdefghjkmnpqrstuvwxyz23456789", Character.LOWERCASE_LETTER);
-		// Given
-
-		this.getEmail();
-		this.getPassword();
 
 		ShoppingCartForm cartItem = new ShoppingCartForm();
 		cartItem.setCartId(this.carttId);
@@ -1060,41 +954,12 @@ public class ControllerTestClass {
 				.content(mapper.writeValueAsString(cartItem))).andDo(print()).andExpect(status().isOk());// .andExpect(content().json(mapper.writeValueAsString(customer)));
 
 	}
+	
+	public String getCartId() {
 
-	/**
-	 * Test add to cart unit/integrated testing
-	 * 
-	 * @throws Exception
-	 * 
-	 * 
-	 * @see {@link com.turing.ecommerce.controllers.CustomerController#addToShoppingCart(ShoppingCartForm}.
-	 * 
-	 * @throws Exception
-	 */
-
-	@Test
-	@Transactional
-	public void testStripeCharge() throws Exception {
-
-		ChargeRequest charge = new ChargeRequest();
-
-		charge.setAmount(5);
-		charge.setCurrency("USD");
-		charge.setDescription("testing payment endpoint");
-		charge.setOrderId(1);
-		charge.setStripeToken("sk_test_vvpKl3yIpBVeoRJ3qxS6mjIF00jfi6Bi6j");
-
-		StripeService mock = org.mockito.Mockito.mock(StripeService.class);
-
-		given(mock.charge(charge)).willReturn(new Charge());
-
-		// when + then
-
-		ObjectMapper mapper = new ObjectMapper();
-
-		this.mockMvc.perform(post("/api/stripe/charge").contentType(MediaType.APPLICATION_JSON)
-				.content(mapper.writeValueAsString(charge))).andDo(print()).andExpect(status().isOk());// .andExpect(content().json(mapper.writeValueAsString(customer)));
-
+		// Generate different email for testing
+		return Uid.generateRandomId(5, "abcdefghjkmnpqrstuvwxyz23456789", Character.LOWERCASE_LETTER);
 	}
+
 
 }

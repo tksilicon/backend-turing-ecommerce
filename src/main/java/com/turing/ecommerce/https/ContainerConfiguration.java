@@ -21,8 +21,8 @@ import org.springframework.context.annotation.Configuration;
 public class ContainerConfiguration {
 
 	
-	
-	//@Bean
+	/**
+	@Bean
     public ServletWebServerFactory servletContainer() {
         TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() {
             @Override
@@ -48,6 +48,6 @@ public class ContainerConfiguration {
         connector.setSecure(false);
         connector.setRedirectPort(8443);
         return connector;
-    }
+    }**/
 
 }

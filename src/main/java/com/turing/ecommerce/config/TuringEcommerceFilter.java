@@ -1,4 +1,4 @@
-package com.turing.ecommerce.controllers;
+package com.turing.ecommerce.config;
 
 import java.io.IOException;
 
@@ -44,6 +44,7 @@ public class TuringEcommerceFilter implements Filter {
 		HttpServletResponse res = (HttpServletResponse) servletResponse;
 		LOG.info("Logging Request  {} : {}", req.getMethod(), req.getRequestURI());
 		filterChain.doFilter(servletRequest, servletResponse);
+		LOG.info("Logging Response :{}", res.toString());
 		LOG.info("Logging Response :{}", res.getContentType());
 	}
 

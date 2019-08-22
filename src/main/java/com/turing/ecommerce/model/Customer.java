@@ -79,12 +79,22 @@ public class Customer implements UserDetails, Serializable {
 
 	@ApiModelProperty(required = false, hidden = true)
 	@Transient
-	private List<String> roles = Arrays.asList("USER");
+	private List<String> roles = Arrays.asList("ROLE_USER");
 
-	
+	@Transient
+    private Customer customer;
+
+    public Customer(Customer user) {
+
+        this.customer = user;
+        
+
+    }
 
 	public Customer() {
 	}
+	
+	
 
 	public int getCustomerId() {
 		return this.customerId;

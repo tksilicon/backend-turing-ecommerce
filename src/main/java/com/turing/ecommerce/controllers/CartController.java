@@ -59,6 +59,9 @@ public class CartController {
 
 	@Resource(name = "cartServiceImpl")
 	private CartService cartService;
+	
+	public static final String CARDNOTFOUND = "Cart Not found";
+	public static final String ITEMNOTFOUND = "Item Not found";
 
 	/**
 	 * Generate Card Id Unique ID
@@ -69,7 +72,7 @@ public class CartController {
 	public ResponseEntity<Map<String, String>> getCartId() {
 
 		String str = Uid.generateRandomId(11, "abcdefghjkmnpqrstuvwxyz23456789", Character.LOWERCASE_LETTER);
-		Map<String, String> model = new HashMap<String, String>();
+		Map<String, String> model = new HashMap<>();
 		model.put("cart_id", str);
 		return ResponseEntity.ok(model);
 	}
@@ -78,11 +81,9 @@ public class CartController {
 	 * API endpoint to add to shopping cart
 	 */
 	@PostMapping(path = "/api/shoppingcart/add")
-	public ResponseEntity<List<CartWithProduct>> addToShoppingCart(@Valid @RequestBody ShoppingCartForm cart)
-			throws CustomerExistException {
+	public ResponseEntity<List<CartWithProduct>> addToShoppingCart(@Valid @RequestBody ShoppingCartForm cart) {
 
-		ProductDetail pdo = cartService.getProduct(cart.getProductId())
-				.orElseThrow(() -> new ProductNotFoundException("Product Not found"));
+		
 
 		ShoppingCart scp = new ShoppingCart();
 		scp.setCartId(cart.getCartId());
@@ -111,7 +112,7 @@ public class CartController {
 		try {
 			return ResponseEntity.ok(cartService.getShoppingCartProducts2(cartId));
 		} catch (EntityNotFoundException ex) {
-			throw new CartNotFoundException("Cart Not found");
+			throw new CartNotFoundException(CARDNOTFOUND);
 
 		}
 
@@ -126,7 +127,7 @@ public class CartController {
 		try {
 			return ResponseEntity.ok(cartService.getSavedItemInCart(itemId, quant));
 		} catch (EntityNotFoundException ex) {
-			throw new ItemNotFoundException("Cart Not found");
+			throw new ItemNotFoundException(CARDNOTFOUND);
 
 		}
 	}
@@ -144,7 +145,7 @@ public class CartController {
 			returnCart = cartService.delete(cartId);
 			return ResponseEntity.ok(returnCart);
 		} catch (EntityNotFoundException ex) {
-			throw new CartNotFoundException("Cart Not found");
+			throw new CartNotFoundException(CARDNOTFOUND);
 
 		}
 
@@ -161,7 +162,7 @@ public class CartController {
 
 			return ResponseEntity.ok().build();
 		} catch (EntityNotFoundException ex) {
-			throw new ItemNotFoundException("Item Not found");
+			throw new ItemNotFoundException(ITEMNOTFOUND);
 
 		}
 
@@ -175,13 +176,13 @@ public class CartController {
 			@PathVariable(name = "cart_id}", required = true) String cartId) {
 
 		BigDecimal dec = cartService.returnTotalAmountCart(cartId);
-		Map<String, BigDecimal> map = new HashMap<String, BigDecimal>();
+		Map<String, BigDecimal> map = new HashMap<>();
 		map.put("total_amount", dec);
 		try {
 			return ResponseEntity.ok(map);
 
 		} catch (EntityNotFoundException ex) {
-			throw new CartNotFoundException("Cart Not found");
+			throw new CartNotFoundException(CARDNOTFOUND);
 
 		}
 
@@ -197,7 +198,7 @@ public class CartController {
 		try {
 			return ResponseEntity.ok().build();
 		} catch (EntityNotFoundException ex) {
-			throw new ItemNotFoundException("Item Not found");
+			throw new ItemNotFoundException(ITEMNOTFOUND);
 
 		}
 
@@ -211,7 +212,7 @@ public class CartController {
 		try {
 			return ResponseEntity.ok(cartService.getSaved(cartId));
 		} catch (EntityNotFoundException ex) {
-			throw new CartNotFoundException("Cart Not found");
+			throw new CartNotFoundException(CARDNOTFOUND);
 
 		}
 
@@ -228,7 +229,7 @@ public class CartController {
 			cartService.updateCart(itemId, null);
 			return ResponseEntity.ok().build();
 		} catch (EntityNotFoundException ex) {
-			throw new ItemNotFoundException("Item Not found");
+			throw new ItemNotFoundException(ITEMNOTFOUND);
 
 		}
 

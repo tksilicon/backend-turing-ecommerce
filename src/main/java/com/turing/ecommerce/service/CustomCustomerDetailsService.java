@@ -7,7 +7,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import com.turing.ecommerce.controllers.CustomerController;
+import com.turing.ecommerce.model.Customer;
 import com.turing.ecommerce.repository.CustomerRepository;
+
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -15,21 +21,25 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
  * @author frankukachukwu
  *
  */
-
+@Slf4j
 @Service("customCustomerDetailsService")
 public class CustomCustomerDetailsService implements UserDetailsService  {
 	
+	@Autowired
 	private CustomerRepository customers;    
 	
 	
-	public CustomCustomerDetailsService(CustomerRepository customers) {
-        this.customers = customers;
-    }    
+	
 	
 	@Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return this.customers.findByEmail(email)
+    public UserDetails loadUserByUsername(String email)  {
+	
+      return this.customers.findByEmail(email)
             .orElseThrow(() -> new UsernameNotFoundException("Username: " + email + " not found"));
+        		
+        
+       
+              
     }
 
 }

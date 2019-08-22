@@ -18,7 +18,7 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import com.stripe.model.Token;
 import com.turing.ecommerce.DTO.ChargeRequest;
-import com.turing.ecommerce.controllers.TuringEcommerceFilter;
+import com.turing.ecommerce.config.TuringEcommerceFilter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Component
-public class StripeServiceImpl {
+public class StripeServiceImpl{
 
 	private final static Logger LOG = LoggerFactory.getLogger(StripeServiceImpl.class);
 	
@@ -42,7 +42,7 @@ public class StripeServiceImpl {
 		  Stripe.apiKey = "sk_test_vvpKl3yIpBVeoRJ3qxS6mjIF00jfi6Bi6j";
 	    }
 
-
+  
 	public Charge charge(ChargeRequest chargeRequest) throws AuthenticationException, InvalidRequestException,
 			ApiConnectionException, CardException, ApiException, StripeException {
       

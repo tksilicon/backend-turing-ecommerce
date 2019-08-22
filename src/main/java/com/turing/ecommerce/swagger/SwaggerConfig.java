@@ -84,6 +84,7 @@ public class SwaggerConfig {
 
 	public static final String AUTHORIZATION_HEADER = "USER_KEY";
 	public static final String DEFAULT_INCLUDE_PATTERN = "/api/.*";
+	
 
 	public static final String PRODUCT_ID = "/api/products/\\{product_id\\}/reviews";
 	public static final String CUSTOMER = "/api/customer";
@@ -110,13 +111,13 @@ public class SwaggerConfig {
 				"https://github.com/tksilicon/backend-turing-ecommerce", contact, "Apache 2.0",
 				"http://www.apache.org/licenses/LICENSE-2.0", vendorExtensions);
 		
-		Set<String> protocols = new HashSet<String>();
-		protocols.add("https");
+		//Set<String> protocols = new HashSet<String>();
+		//protocols.add("https");
 		
 		
 
 		Docket docket = new Docket(DocumentationType.SWAGGER_2)
-				.protocols(protocols)
+				//.protocols(protocols)
 				.apiInfo(apiInfo)
 				
 				.forCodeGeneration(true)

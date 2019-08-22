@@ -12,16 +12,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.turing.ecommerce.DTO.CategoryAllDTO;
-import com.turing.ecommerce.DTO.CategoryDTO;
 import com.turing.ecommerce.DTO.CategoryBasic;
+import com.turing.ecommerce.DTO.CategoryDTO;
 import com.turing.ecommerce.model.Category;
-import com.turing.ecommerce.model.ProductCategory;
-
 import com.turing.ecommerce.service.CategoryService;
 import com.turing.ecommerce.service.ProdCatDAOServiceImpl;
 
 import io.swagger.annotations.Api;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Category Controller for all Rest APIs endpoints related to Category.

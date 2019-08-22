@@ -19,7 +19,7 @@ import com.turing.ecommerce.repository.AttributesRepository;
 public class AttributesServiceImpl implements AttributesService {
 
 	@Autowired
-	private AttributesRepository attributesRepository;
+    AttributesRepository attributesRepository;
 	
 	
 

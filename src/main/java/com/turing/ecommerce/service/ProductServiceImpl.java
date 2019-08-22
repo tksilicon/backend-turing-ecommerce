@@ -10,7 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.turing.ecommerce.DTO.ProductInDepartment;
 import com.turing.ecommerce.DTO.ProductDetail;
@@ -33,6 +33,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	private ProductRepository productRepository;
+	
 	
 	@Override
 	public Map<String, Object> getAll(Integer page, Integer limit, Integer description_length) {
