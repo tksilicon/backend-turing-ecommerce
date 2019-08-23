@@ -4,7 +4,7 @@ before_install:
    - gem install bundler
 
 script:
-   mvn -DskipTests=true -B -V
+   mvn test -DskipTests=true -B -V
 
 
 #deploy:
