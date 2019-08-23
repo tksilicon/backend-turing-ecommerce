@@ -1,11 +1,10 @@
 language: java
-jdk: oraclejdk9
 
 before_install:
-  - gem install bundler
+   - gem install bundler
 
 script:
-- ./mvnw clean install -B
+   mvn test -B
 
 
 #deploy:
