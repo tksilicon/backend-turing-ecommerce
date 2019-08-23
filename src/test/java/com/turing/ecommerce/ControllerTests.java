@@ -931,7 +931,7 @@ public class ControllerTests {
 	 * @throws Exception
 	 */
 
-	@Ignore
+	@Test
 	public void testAddToCart() throws Exception {
 
 		ShoppingCartForm cartItem = new ShoppingCartForm();

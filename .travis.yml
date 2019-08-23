@@ -4,7 +4,7 @@ before_install:
    - gem install bundler
 
 script:
-   mvn test -B
+   mvn verify -B
 
 
 #deploy:
