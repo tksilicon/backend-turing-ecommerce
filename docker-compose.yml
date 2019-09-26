@@ -31,6 +31,7 @@ services:
       MYSQL_USER: root
       MYSQL_ROOT_PASSWORD: root
     volumes:
+      - ./database:/docker-entrypoint-initdb.d
       - db-data:/var/lib/mysql
     networks:
       - turingmysql  
