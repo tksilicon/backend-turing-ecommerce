@@ -102,6 +102,7 @@ public class ControllerTests {
 	@Test
 	public void contextLoads() {
 	}
+	
 	@Test
 	@Transactional
 	public void testGetDepartment() throws Exception {
@@ -112,7 +113,7 @@ public class ControllerTests {
 
 		department.setDepartmentId(1);
 
-		department.setName("Africa");
+		department.setName("Regional");
 
 		Optional<DepartmentDTO> optionalDepartment = Optional.of(department);
 		DepartmentService mock = org.mockito.Mockito.mock(DepartmentService.class);

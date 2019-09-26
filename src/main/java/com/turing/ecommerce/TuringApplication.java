@@ -11,7 +11,5 @@ public class TuringApplication {
 		SpringApplication.run(TuringApplication.class, args);
 	}
 	
-	
-	
 
 }

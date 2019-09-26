@@ -4,7 +4,7 @@
 package com.turing.ecommerce.service;
 
 /**
- * @author frankukachukwu
+ * @author thankgodukachukwu
  *
  */
 
@@ -43,10 +43,9 @@ public class StripeServiceImpl{
 	    }
 
   
-	public Charge charge(ChargeRequest chargeRequest) throws AuthenticationException, InvalidRequestException,
-			ApiConnectionException, CardException, ApiException, StripeException {
+	public Charge charge(ChargeRequest chargeRequest) throws StripeException {
       
-		Map<String, Object> chargeParams = new HashMap<String, Object>();
+		Map<String, Object> chargeParams = new HashMap<>();
 		chargeParams.put("amount", chargeRequest.getAmount());
 		chargeParams.put("currency", chargeRequest.getCurrency());
 		chargeParams.put("description", chargeRequest.getDescription());

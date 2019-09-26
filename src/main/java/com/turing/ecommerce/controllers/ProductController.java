@@ -134,8 +134,10 @@ public class ProductController {
 		if (all_words.isEmpty() || all_words == null) {
 			return ResponseEntity.ok(productService.productSearch(query_string, null, page, limit, description_length));
 		} else {
-			return ResponseEntity
-					.ok(productService.productSearch(query_string, all_words, page, limit, description_length));
+			
+			return ResponseEntity.ok(productService.productSearch(query_string, null, page, limit, description_length));
+			//return ResponseEntity
+					//.ok(productService.productSearch(query_string, all_words, page, limit, description_length));
 		}
 
 	}

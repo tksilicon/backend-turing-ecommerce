@@ -58,7 +58,7 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
      * 
      * @return the list of category
      */
-	@Query("SELECT new com.turing.ecommerce.DTO.CategoryAllDTO(c.categoryId,c.departmentId, c.name, c.description)  "
+	@Query("SELECT new com.turing.ecommerce.DTO.CategoryAllDTO(c.categoryId,c.departmentId, c.description, c.name)  "
 			+ " FROM Category c")
 	public List<CategoryAllDTO> getAllOfCategory();
 	

@@ -38,9 +38,11 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, I
 	List<Product> productSearch2(@Param("all_words") String all_words,
 			@Param("description_length") Integer description_length, Pageable pageable);
 
-	@Query(value = "select new com.turing.ecommerce.DTO.ProductInDepartment(pp.name, pp.productId, pp.description, pp.price,"
-			+ " pp.discountedPrice, pp.thumbnail) from Category c inner join ProductCategory p on c.categoryId = p.id.categoryId inner join Product pp "
-			+ " on p.id.productId = pp.productId where c.categoryId = :categoryId AND pp.description = SUBSTRING(pp.description, 1,:description_length)")
+	@Query(value = "select new com.turing.ecommerce.DTO.ProductInDepartment(pp.name, pp.productId, "
+			+ "pp.description, pp.price, pp.discountedPrice, pp.thumbnail) from Category c inner join "
+			+ "ProductCategory p on c.categoryId = p.id.categoryId inner join Product pp "
+			+ " on p.id.productId = pp.productId where c.categoryId = :categoryId AND pp.description "
+			+ "= SUBSTRING(pp.description, 1,:description_length)")
 	List<ProductInDepartment> productSearchCategory(@Param("categoryId") Integer categoryId,
 			@Param("description_length") Integer description_length, Pageable pageable);
 

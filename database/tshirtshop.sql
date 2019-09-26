@@ -1,4 +1,9 @@
+CREATE DATABASE IF NOT EXISTS tshirtshop;
+
+USE tshirtshop;
+
 -- Create tshirtshop tables
+
 
 -- Create department table
 CREATE TABLE `department` (

@@ -1,9 +1,5 @@
 package com.turing.ecommerce.facebook;
 
-import java.util.List;
-
-import org.springframework.stereotype.Component;
-
 import com.turing.ecommerce.facebook.api.ApiBinding;
 
 public class Facebook extends ApiBinding {

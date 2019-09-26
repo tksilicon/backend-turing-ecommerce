@@ -17,7 +17,10 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<!--  <docker.image.prefix>turingchallengeukachukwu</docker.image.prefix>-->
 	</properties>
+	
+	
 
 	<dependencies>
 		<dependency>
@@ -167,6 +170,7 @@
 			</exclusions>
 		</dependency>
 	</dependencies>
+	
 	<build>
 		<plugins>
 
@@ -174,7 +178,48 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			
+			<!-- docker -->
+			
+			 <!-- tag::plugin[] -->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.9</version>
+                <configuration>
+                    <repository>${project.artifactId}</repository>
+                </configuration>
+            </plugin>
+            <!-- end::plugin[] -->
+            
+             <!-- tag::unpack[] -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>${project.artifactId}</artifactId>
+                                    <version>${project.version}</version>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- end::unpack[] -->
+			
+			<!-- docker -->
 
+			<!-- 
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
@@ -219,13 +264,10 @@
 						</goals>
 					</execution>
 					
-					<!--<execution>
-						<id>report</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-					</execution>-->
+				
+				
+				
+				
 					<execution>
 						<id>default-report-integration</id>
 						<goals>
@@ -240,11 +282,11 @@
 						</goals>
 						<configuration>
 							<rules>
-								<!-- implementation is needed only for Maven 2 -->
+								 implementation is needed only for Maven 2 
 								<rule implementation="org.jacoco.maven.RuleConfiguration">
 									<element>BUNDLE</element>
 									<limits>
-										<!-- implementation is needed only for Maven 2 -->
+										 implementation is needed only for Maven 2 
 										<limit implementation="org.jacoco.report.check.Limit">
 											<counter>COMPLEXITY</counter>
 											<value>COVEREDRATIO</value>
@@ -257,8 +299,7 @@
 					</execution>
 				</executions>
 			</plugin>
-
-
+			-->
 		</plugins>
 	</build>
 
