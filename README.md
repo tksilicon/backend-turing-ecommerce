@@ -1,5 +1,7 @@
 # backend-turing-ecommerce
 
+[![Build Status](https://travis-ci.com/tksilicon/backend-turing-ecommerce.svg?token=MTwBmqJPQiznnspt2qot&branch=master)](https://travis-ci.com/tksilicon/backend-turing-ecommerce.svg?token=MTwBmqJPQiznnspt2qot&branch=master)
+
 System architecture
 
 This backend was developed with Spring Boot version 2.2.0.M2. 
@@ -54,7 +56,7 @@ docker-compose up  (it will take some moments)
 
 open
 
-http://localhost:8080/swagger-ui.html#/
+http://localhost:8080/swagger-ui.html#/  
 http://localhost:8080/api/
 
 
