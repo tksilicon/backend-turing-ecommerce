@@ -38,5 +38,4 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
 
 
 
-
 ENTRYPOINT ["java","-cp","app:app/lib/*","com.turing.ecommerce.TuringApplication"]
