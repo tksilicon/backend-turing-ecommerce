@@ -16,7 +16,8 @@ services:
     environment: # Pass environment variables to the service
       SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/tshirtshop?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root   
+      SPRING_DATASOURCE_PASSWORD: root 
+      spring.jpa.hibernate.ddl-auto: none  
     networks: # Networks to join (Services on the same network can communicate with each other using their name)
       - turingmysql
       
@@ -26,6 +27,7 @@ services:
     ports:
       - "3306:3306"
     restart: always
+   
     environment:
       MYSQL_DATABASE: tshirtshop
       MYSQL_USER: root
@@ -33,6 +35,7 @@ services:
     volumes:
       - ./database:/docker-entrypoint-initdb.d
       - db-data:/var/lib/mysql
+     
     networks:
       - turingmysql  
     

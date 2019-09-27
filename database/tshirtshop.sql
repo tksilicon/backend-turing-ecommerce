@@ -1,9 +1,7 @@
-CREATE DATABASE IF NOT EXISTS tshirtshop;
-
-USE tshirtshop;
-
 -- Create tshirtshop tables
-
+-- Create tshirtshop tables
+CREATE DATABASE `tshirtshop` IF NOT EXISTS;
+USE `tshirtshop`;
 
 -- Create department table
 CREATE TABLE `department` (
@@ -358,16 +356,6 @@ INSERT INTO `shipping` (`shipping_id`,   `shipping_type`,
 INSERT INTO `tax` (`tax_id`, `tax_type`, `tax_percentage`) VALUES
        (1, 'Sales Tax at 8.5%', 8.50),
        (2, 'No Tax',            0.00);
-     
---  Add Data to customer table for test
---
--- Dumping data for table `customer`
---
-
-INSERT INTO `customer` (`customer_id`, `name`, `email`, `password`, `credit_card`, `address_1`, `address_2`, `city`, `region`, `postal_code`, `country`, `shipping_region_id`, `day_phone`, `eve_phone`, `mob_phone`) VALUES
-(76, 'James', 'jameswong@turing.com', '$2a$10$p4kavpcwUUk5FSxZSDCxbOby6I8TMpIWfD1TyohNqh8gnTu.8qSaG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL);
-
-       
 
 -- Change DELIMITER to $$
 DELIMITER $$
