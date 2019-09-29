@@ -29,9 +29,7 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: tshirtshop
       MYSQL_USER: turing
-      MYSQL_PASSWORD: pass
-      
-      
+      MYSQL_PASSWORD: pass 
     volumes:
       - db-data:/var/lib/mysql
       - ./database:/docker-entrypoint-initdb.d
