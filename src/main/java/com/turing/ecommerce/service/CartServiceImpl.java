@@ -16,15 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.turing.ecommerce.DTO.CartWithProduct;
 import com.turing.ecommerce.DTO.ItemForm;
 import com.turing.ecommerce.DTO.ProductDetail;
 import com.turing.ecommerce.DTO.SavedItem;
 import com.turing.ecommerce.DTO.ShoppingCartForm;
-import com.turing.ecommerce.DTO.CartWithProduct;
 import com.turing.ecommerce.exceptions.CartNotFoundException;
-import com.turing.ecommerce.exceptions.ProductNotFoundException;
-import com.turing.ecommerce.model.Order;
-import com.turing.ecommerce.model.Product;
 import com.turing.ecommerce.model.ShoppingCart;
 import com.turing.ecommerce.repository.CartRepository;
 import com.turing.ecommerce.repository.OrderRepository;

@@ -75,7 +75,7 @@ public class TuringApplicationTests {
 	ObjectMapper objectMapper;
 
 	public static final String BEARERSTRING = "Bearer ";
-	;
+	
 
 	@Test
 	public void contextLoads() {

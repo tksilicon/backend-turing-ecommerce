@@ -34,7 +34,6 @@ public class CustomCustomerDetailsService implements UserDetailsService  {
             .orElseThrow(() -> new UsernameNotFoundException("Username: " + email + " not found"));
         		
         
-       
               
     }
 

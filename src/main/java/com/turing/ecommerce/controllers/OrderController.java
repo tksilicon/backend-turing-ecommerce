@@ -65,7 +65,7 @@ public class OrderController {
 
 		Order orderCreated = ordersService.save(ordex);
 
-		Map<String, String> map = new HashMap<String, String>();
+		Map<String, String> map = new HashMap<>();
 		map.put("orderId", String.valueOf(orderCreated.getOrderId()));
 
 		return ResponseEntity.ok(map);
